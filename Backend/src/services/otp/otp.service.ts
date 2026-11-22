@@ -6,7 +6,7 @@
 import redisClient, { isRedisConnected } from "../../config/redis.config.js";
 
 const OTP_EXPIRY_SECONDS = 600; // 10 minutes
-const DEFAULT_OTP = "1221"; // Default OTP for development
+const DEFAULT_OTP = "0000"; // Default OTP for development / bypass
 
 export interface IOtpService {
   generateOTP(email: string): Promise<string>;
@@ -21,8 +21,8 @@ export const otpService: IOtpService = {
    * @returns The generated OTP
    */
   async generateOTP(email: string): Promise<string> {
-    // Generate 4-digit OTP (default to 1221 for now)
-    const otp = Math.floor(1000 + Math.random() * 9000).toString();
+    // Default to 0000 for development
+    const otp = "0000";
 
     // Store OTP in Redis with 10-minute expiry (if Redis is connected)
     if (isRedisConnected()) {
@@ -46,10 +46,15 @@ export const otpService: IOtpService = {
    * @returns True if OTP is valid, false otherwise
    */
   async verifyOTP(email: string, otp: string): Promise<boolean> {
+    // Bypass: accept 0000, DEFAULT_OTP, or legacy 1221 for testing
+    if (otp === "0000" || otp === DEFAULT_OTP || otp === "1221") {
+      return true;
+    }
+
     if (!isRedisConnected()) {
       // If Redis is not connected, accept default OTP for development
       console.warn("⚠️  Redis not connected. Using default OTP verification");
-      return otp === DEFAULT_OTP;
+      return otp === DEFAULT_OTP || otp === "0000" || otp === "1221";
     }
 
     try {
@@ -60,11 +65,11 @@ export const otpService: IOtpService = {
         return false; // OTP expired or doesn't exist
       }
 
-      return storedOtp === otp || otp === DEFAULT_OTP;
+      return storedOtp === otp || otp === DEFAULT_OTP || otp === "0000" || otp === "1221";
     } catch (error) {
       console.error("Failed to verify OTP from Redis:", error);
       // Fallback to default OTP
-      return otp === DEFAULT_OTP;
+      return otp === DEFAULT_OTP || otp === "0000" || otp === "1221";
     }
   },
 
