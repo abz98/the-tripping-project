@@ -1,0 +1,211 @@
+<footer class="footer">
+  <!-- Main Footer -->
+  <div class="footer-main">
+    <div class="footer-container">
+      <!-- Left Section -->
+      <div class="footer-left">
+        <!-- Newsletter -->
+        <div class="newsletter">
+          <h2 class="newsletter-title">Newsletter Subscription</h2>
+          <p class="newsletter-desc">
+            Hello, we are ABC. trying to make an effort to put the right people
+            for you to get the best results. Just insight
+          </p>
+          <div class="newsletter-form">
+            <input
+              type="email"
+              placeholder="Your Email"
+              class="newsletter-input"
+              [(ngModel)]="newsletterEmail"
+              [disabled]="isSubmittingNewsletter"
+              (keyup.enter)="subscribeNewsletter()"
+            />
+            <button
+              class="newsletter-btn"
+              (click)="subscribeNewsletter()"
+              [disabled]="isSubmittingNewsletter"
+            >
+              {{ isSubmittingNewsletter ? "Subscribing..." : "Subscribe" }}
+            </button>
+          </div>
+          <div class="message success-message" *ngIf="newsletterSuccessMessage">
+            {{ newsletterSuccessMessage }}
+          </div>
+          <div class="message error-message" *ngIf="newsletterErrorMessage">
+            {{ newsletterErrorMessage }}
+          </div>
+        </div>
+
+        <!-- Footer Links -->
+        <div class="footer-links">
+          <!-- About -->
+          <div class="link-column">
+            <h3 class="column-title">About</h3>
+            <ul class="link-list">
+              <li><a routerLink="/home/about">About Us</a></li>
+              <li><a routerLink="/home/mission">Our Mission</a></li>
+              <li><a routerLink="/home/how-it-works">How It Works</a></li>
+            </ul>
+          </div>
+
+          <!-- Support -->
+          <div class="link-column">
+            <h3 class="column-title">Support</h3>
+            <ul class="link-list">
+              <li><a routerLink="/home/contact">Contact Us</a></li>
+              <li><a routerLink="/home/help">Help Center</a></li>
+              <li>
+                <a routerLink="/home/cancellation-policy"
+                  >Cancellation & Refund Policy</a
+                >
+              </li>
+              <li>
+                <a routerLink="/home/terms-conditions">Terms & Conditions</a>
+              </li>
+              <li><a routerLink="/home/privacy-policy">Privacy Policy</a></li>
+            </ul>
+          </div>
+
+          <!-- Host with Us -->
+          <div class="link-column">
+            <h3 class="column-title">Host with Us</h3>
+            <ul class="link-list">
+              <li><a routerLink="/home/become-host">Become a Host</a></li>
+              <li>
+                <a routerLink="/home/host-guidelines">Guidelines for Hosts</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Community -->
+          <div class="link-column">
+            <h3 class="column-title">Community</h3>
+            <ul class="link-list">
+              <li>
+                <a routerLink="/home/traveller-reviews">Traveller Reviews</a>
+              </li>
+              <!-- <li><a routerLink="#">Blog / Travel Stories</a></li> -->
+            </ul>
+            <!-- Social Icons -->
+            <div class="social-icons">
+              <a href="#" class="social-icon">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+                  ></path>
+                </svg>
+              </a>
+              <a href="#" class="social-icon">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+                  ></path>
+                </svg>
+              </a>
+              <a href="#" class="social-icon">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path
+                    d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                  ></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Section - Contact Form -->
+      <div class="footer-right">
+        <h2 class="contact-title">Let Us Get Back To You</h2>
+        <form
+          class="contact-form"
+          (submit)="$event.preventDefault(); submitContactForm()"
+        >
+          <input
+            type="text"
+            placeholder="Enter Name"
+            class="form-input"
+            [(ngModel)]="contactForm.name"
+            name="name"
+            [disabled]="isSubmittingContact"
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email Address"
+            class="form-input"
+            [(ngModel)]="contactForm.email"
+            name="email"
+            [disabled]="isSubmittingContact"
+            required
+          />
+          <textarea
+            placeholder="Enter message"
+            class="form-textarea"
+            rows="4"
+            [(ngModel)]="contactForm.message"
+            name="message"
+            [disabled]="isSubmittingContact"
+            required
+          ></textarea>
+          <div class="form-row">
+            <input
+              type="tel"
+              placeholder="Phone Number"
+              class="form-input phone-input"
+              [(ngModel)]="contactForm.phone"
+              name="phone"
+              [disabled]="isSubmittingContact"
+            />
+            <button
+              type="submit"
+              class="submit-btn"
+              [disabled]="isSubmittingContact"
+            >
+              {{ isSubmittingContact ? "Sending..." : "Submit" }}
+            </button>
+          </div>
+          <div class="message success-message" *ngIf="contactSuccessMessage">
+            {{ contactSuccessMessage }}
+          </div>
+          <div class="message error-message" *ngIf="contactErrorMessage">
+            {{ contactErrorMessage }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Bottom -->
+  <div class="footer-bottom">
+    <div class="footer-container bottom-container">
+      <div class="footer-logo">
+        <img src="logoNoBG.png" alt="Tripping Logo" />
+      </div>
+      <p class="copyright">© 2025 ABC. All Rights Reserved.</p>
+      <div class="bottom-links">
+        <a routerLink="/home/privacy-policy">Privacy Policy</a>
+        <a routerLink="/home/terms-conditions">Terms of Services</a>
+      </div>
+    </div>
+  </div>
+</footer>

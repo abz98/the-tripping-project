@@ -1,0 +1,169 @@
+<section class="trips-section">
+  <div class="trips-container">
+    <!-- Header -->
+    <div class="trips-header">
+      <h2 class="trips-title">Trending Trips</h2>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-state">
+      <p>Loading trips...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="error-state">
+      <p>{{ error }}</p>
+    </div>
+
+    <!-- Trip Cards Grid -->
+    <div class="trips-grid" *ngIf="!loading && !error">
+      <!-- Dynamic Trip Cards -->
+      <div class="trip-card" *ngFor="let trip of trips">
+        <div class="card-image">
+          <img [src]="getCurrentImage(trip)" [alt]="trip.title" />
+          <span class="slots-badge" *ngIf="getAvailableSlots(trip) > 0">
+            Available: {{ getAvailableSlots(trip) }} Slots
+          </span>
+          <button class="wishlist-btn">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+              ></path>
+            </svg>
+          </button>
+          <div class="image-nav">
+            <button class="nav-arrow prev" (click)="previousImage(trip)">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <button class="nav-arrow next" (click)="nextImage(trip)">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+          <div class="image-dots">
+            <span 
+              *ngFor="let image of trip.images; let i = index" 
+              class="dot" 
+              [class.active]="i === getCurrentImageIndex(trip)"
+              (click)="setCurrentImage(trip, i)">
+            </span>
+          </div>
+        </div>
+        <div class="card-content">
+          <h3 class="trip-name">{{ trip.title }}</h3>
+          <div class="trip-meta" *ngIf="getDuration(trip)">
+            <span class="meta-item">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              {{ getDuration(trip) }}
+            </span>
+            <span class="meta-item" *ngIf="getStartDate(trip)">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              {{ getStartDate(trip) }}
+              <span *ngIf="getAdditionalBatchesCount(trip) > 0">
+                / + {{ getAdditionalBatchesCount(trip) }} more
+              </span>
+            </span>
+          </div>
+          <div class="trip-route">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span
+              >{{ trip.route.startLocation }} - {{ trip.route.endLocation
+              }}<span *ngIf="trip.route.pickupLocations.length > 0"
+                >...</span
+              ></span
+            >
+          </div>
+          <div class="trip-price-row">
+            <div class="price-info">
+              <span class="price">₹ {{ trip.pricePerPerson }}/</span>
+              <span class="per-person">Per Person</span>
+              <span class="tax-note">Including taxes and fees</span>
+            </div>
+            <a (click)="viewTripDetails(trip.id)" class="view-details"
+              >View Details »</a
+            >
+          </div>
+          <div class="host-info">
+            <img
+              src="redtraveller.jpg"
+              [alt]="trip.host.name"
+              class="host-avatar"
+            />
+            <div class="host-details">
+              <span class="hosted-by">Hosted by</span>
+              <span class="host-name">{{ trip.host.name }}</span>
+            </div>
+            <span class="super-host-badge" *ngIf="isSuperHost(trip)"
+              >Super Host</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Show All Button -->
+    <div class="show-all-container">
+      <button
+        class="show-all-btn"
+        style="background-color: #80808026; color: #147f94; border: none"
+      >
+        <span>Show more</span>
+      </button>
+    </div>
+  </div>
+</section>

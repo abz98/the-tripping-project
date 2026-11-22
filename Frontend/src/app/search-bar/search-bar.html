@@ -1,0 +1,362 @@
+<section class="search-bar">
+  <div class="search-container">
+    <!-- Destination Input -->
+    <div class="search-field destination">
+      <svg
+        class="field-icon"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <input
+        type="text"
+        class="field-input"
+        placeholder="Search by Destination or Trip Name"
+        [(ngModel)]="searchQuery"
+        (input)="onSearchInput($event)"
+        (focus)="showDestinationDropdown = true"
+        (click)="toggleDestinationDropdown()"
+      />
+      <svg
+        class="dropdown-icon"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+
+      <!-- Destination Dropdown -->
+      <div
+        class="destination-dropdown"
+        *ngIf="showDestinationDropdown"
+        (click)="$event.stopPropagation()"
+      >
+        <!-- Loading State -->
+        <div class="dropdown-item" *ngIf="isSearching">
+          <span class="dest-name">Searching...</span>
+        </div>
+
+        <!-- No Results -->
+        <div
+          class="dropdown-item"
+          *ngIf="
+            !isSearching && searchQuery.length >= 2 && destinations.length === 0
+          "
+        >
+          <span class="dest-name">No cities found</span>
+        </div>
+
+        <!-- Search Prompt -->
+        <div
+          class="dropdown-item"
+          *ngIf="
+            !isSearching && searchQuery.length < 2 && destinations.length === 0
+          "
+        >
+          <span class="dest-name">Type at least 2 characters to search</span>
+        </div>
+
+        <!-- Results -->
+        <div
+          class="dropdown-item"
+          *ngFor="let dest of destinations"
+          (click)="selectDestination(dest)"
+          style="cursor: pointer"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <span class="dest-name">{{ dest.City }}</span>
+          <span class="dest-state">{{ dest.State }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Trip Start Date -->
+    <div class="search-field date" (click)="toggleDateDropdown()">
+      <svg
+        class="field-icon"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+      <span class="field-text">{{ getFormattedDate() }}</span>
+      <svg
+        class="dropdown-icon"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+
+      <!-- Calendar Dropdown -->
+      <div
+        class="calendar-dropdown"
+        *ngIf="showDateDropdown"
+        (click)="$event.stopPropagation()"
+      >
+        <!-- Month Navigation -->
+        <div class="calendar-header">
+          <button type="button" class="nav-btn" (click)="prevMonth()">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <span class="month-year"
+            >{{ monthNames[currentMonth] }} {{ currentYear }}</span
+          >
+          <button type="button" class="nav-btn" (click)="nextMonth()">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Weekday Headers -->
+        <div class="calendar-weekdays">
+          <span>Mon</span>
+          <span>Tue</span>
+          <span>Wed</span>
+          <span>Thu</span>
+          <span>Fri</span>
+          <span>Sat</span>
+          <span>Sun</span>
+        </div>
+
+        <!-- Calendar Days -->
+        <div class="calendar-days">
+          <span
+            *ngFor="let day of calendarDays"
+            class="calendar-day"
+            [class.other-month]="day.otherMonth"
+            [class.today]="day.today"
+            [class.selected]="day.selected"
+            [class.disabled]="day.disabled"
+            (click)="selectDate(day)"
+          >
+            {{ day.date }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Travellers -->
+    <div class="search-field travellers" (click)="toggleTravellersDropdown()">
+      <svg
+        class="field-icon"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+      <span class="field-text">{{ getTravellersText() }}</span>
+      <svg
+        class="dropdown-icon"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+
+      <!-- Travellers Dropdown -->
+      <div
+        class="travellers-dropdown"
+        *ngIf="showTravellersDropdown"
+        (click)="$event.stopPropagation()"
+      >
+        <!-- Slot Options -->
+        <div class="slot-options">
+          <div
+            class="slot-option"
+            [class.active]="selectedSlot === 1"
+            (click)="selectSlot(1)"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <circle cx="12" cy="8" r="4" />
+              <path d="M12 14c-4 0-6 2-6 4v2h12v-2c0-2-2-4-6-4z" />
+            </svg>
+            <span>1 slot</span>
+          </div>
+          <div
+            class="slot-option"
+            [class.active]="selectedSlot === 2"
+            (click)="selectSlot(2)"
+          >
+            <svg
+              width="28"
+              height="24"
+              viewBox="0 0 28 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <circle cx="10" cy="8" r="3" />
+              <circle cx="18" cy="8" r="3" />
+              <path d="M6 20v-2c0-2 2-3 4-3h2" />
+              <path d="M16 15h2c2 0 4 1 4 3v2" />
+            </svg>
+            <span>2 slot</span>
+          </div>
+          <div
+            class="slot-option"
+            [class.active]="selectedSlot === 3"
+            (click)="selectSlot(3)"
+          >
+            <svg
+              width="32"
+              height="24"
+              viewBox="0 0 32 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <circle cx="8" cy="8" r="3" />
+              <circle cx="16" cy="6" r="3" />
+              <circle cx="24" cy="8" r="3" />
+              <path d="M4 20v-2c0-1.5 1.5-2.5 3-2.5" />
+              <path d="M13 14c1.5 0 3 1 3 2.5v3.5" />
+              <path d="M25 14.5c1.5 0 3 1 3 2.5v3" />
+            </svg>
+            <span>3 slot</span>
+          </div>
+          <div
+            class="slot-option"
+            [class.active]="selectedSlot === 4"
+            (click)="selectSlot(4)"
+          >
+            <svg
+              width="36"
+              height="24"
+              viewBox="0 0 36 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <circle cx="6" cy="8" r="2.5" />
+              <circle cx="13" cy="6" r="2.5" />
+              <circle cx="23" cy="6" r="2.5" />
+              <circle cx="30" cy="8" r="2.5" />
+              <path d="M3 18v-1c0-1 1-2 2.5-2" />
+              <path d="M11 13c1 0 2 .5 2 1.5v3.5" />
+              <path d="M21 13c1 0 2 .5 2 1.5v3.5" />
+              <path d="M28 15c1.5 0 2.5 1 2.5 2v1" />
+            </svg>
+            <span>4 slot</span>
+          </div>
+        </div>
+
+        <!-- Custom Row -->
+        <div class="custom-row">
+          <span class="custom-label">Custom</span>
+          <div class="custom-counter">
+            <button
+              type="button"
+              class="counter-btn"
+              (click)="decrementCustomSlots()"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="8" y1="12" x2="16" y2="12" />
+              </svg>
+            </button>
+            <span class="counter-value">{{ customSlots }}</span>
+            <button
+              type="button"
+              class="counter-btn active"
+              (click)="incrementCustomSlots()"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="16" />
+                <line x1="8" y1="12" x2="16" y2="12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Button -->
+    <button class="search-btn" (click)="onSearch()">Search</button>
+  </div>
+</section>

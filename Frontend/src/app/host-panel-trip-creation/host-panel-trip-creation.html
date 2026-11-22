@@ -1,0 +1,1558 @@
+<section class="trip-creation-section">
+  <div class="trip-creation-container">
+    <div class="creation-header">
+      <div class="header-content">
+        <h1 class="creation-title">
+          {{ isEditMode ? "Edit" : "Create" }} New Trip
+        </h1>
+        <p class="creation-subtitle">Lorem Ipsum generators on the Internet.</p>
+      </div>
+      <div class="header-actions">
+        <button class="cancel-btn">Cancel</button>
+        <button class="save-btn" (click)="submitTrip()">Save</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Trip Form Section -->
+<section class="trip-form-section">
+  <div class="trip-form-container">
+    <form class="trip-form">
+      <div class="form-grid">
+        <!-- Trip Title -->
+        <div class="form-group">
+          <label class="form-label"
+            >Trip Title <span class="required">*</span></label
+          >
+          <span class="char-count">0/45 characters left</span>
+          <input
+            type="text"
+            class="form-input"
+            placeholder="Enter Title"
+            [(ngModel)]="tripTitle"
+            name="tripTitle"
+            maxlength="45"
+          />
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label class="form-label"
+            >Category <span class="required">*</span></label
+          >
+          <div
+            class="category-multiselect"
+            style="position: relative"
+            (click)="$event.stopPropagation()"
+          >
+            <div
+              class="category-select-trigger"
+              (click)="toggleCategoryDropdown()"
+              style="
+                padding: 12px 16px;
+                border: 1px solid #e5e7eb;
+                border-radius: 50px;
+                cursor: pointer;
+                background: white;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                height: 41px;
+              "
+            >
+              <span style="color: #6b7280; font-size: 14px">
+                {{
+                  selectedCategories.length > 0
+                    ? selectedCategories.length + " selected"
+                    : "Select Categories"
+                }}
+              </span>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                [style.transform]="
+                  showCategoryDropdown ? 'rotate(180deg)' : 'rotate(0deg)'
+                "
+                style="transition: transform 0.2s"
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+
+            <!-- Dropdown -->
+            <div
+              *ngIf="showCategoryDropdown"
+              class="category-dropdown"
+              style="
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 50px;
+                margin-top: 4px;
+                max-height: 200px;
+                overflow-y: auto;
+                z-index: 10;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              "
+            >
+              <div *ngFor="let type of groupedCategories | keyvalue">
+                <!-- Type Header -->
+                <div
+                  style="
+                    padding: 8px 16px;
+                    background: #f9fafb;
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: #6b7280;
+                    text-transform: capitalize;
+                  "
+                >
+                  {{ type.key }}
+                </div>
+
+                <!-- Category Items -->
+                <div
+                  *ngFor="let category of type.value"
+                  (click)="toggleCategorySelection(category)"
+                  class="category-item"
+                  style="
+                    padding: 12px 16px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    border-bottom: 1px solid #f3f4f6;
+                  "
+                  [style.background]="
+                    isCategorySelected(category) ? '#f0fdfa' : 'white'
+                  "
+                >
+                  <!-- Checkbox -->
+                  <div
+                    style="
+                      width: 20px;
+                      height: 20px;
+                      border: 2px solid;
+                      border-radius: 4px;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      flex-shrink: 0;
+                    "
+                    [style.border-color]="
+                      isCategorySelected(category) ? '#0d9488' : '#d1d5db'
+                    "
+                    [style.background]="
+                      isCategorySelected(category) ? '#0d9488' : 'white'
+                    "
+                  >
+                    <svg
+                      *ngIf="isCategorySelected(category)"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="white"
+                      stroke-width="3"
+                    >
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </div>
+
+                  <!-- Category Name -->
+                  <span
+                    style="
+                      font-size: 14px;
+                      color: #1f2937;
+                      font-family: &quot;Lora&quot;, serif;
+                    "
+                  >
+                    {{ category.name }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Selected Categories Tags -->
+          <div
+            class="tags-list"
+            *ngIf="selectedCategories.length > 0"
+            style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px"
+          >
+            <span
+              *ngFor="let category of selectedCategories; let i = index"
+              class="tag"
+              style="
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 12px;
+                background: #f0fdfa;
+                border: 1px solid #ccfbf1;
+                border-radius: 20px;
+                font-size: 13px;
+                color: #0d9488;
+              "
+            >
+              {{ category.name }}
+              <button
+                type="button"
+                class="tag-remove"
+                (click)="removeCategory(i)"
+                style="
+                  background: none;
+                  border: none;
+                  cursor: pointer;
+                  font-size: 18px;
+                  line-height: 1;
+                  color: #0d9488;
+                  padding: 0;
+                  margin-left: 2px;
+                "
+              >
+                ×
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <!-- Trip Destination -->
+        <div class="form-group">
+          <label class="form-label">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            Trip Destination <span class="required">*</span>
+          </label>
+          <div
+            class="input-with-icon"
+            style="position: relative"
+            (click)="$event.stopPropagation()"
+          >
+            <input
+              type="text"
+              class="form-select"
+              placeholder="Search city..."
+              name="searchQuery"
+              [(ngModel)]="searchQuery"
+              (input)="onSearchInput($event)"
+              style="padding-right: 40px"
+            />
+            <button
+              type="button"
+              class="search-icon-btn"
+              (click)="toggleSearchDropdown()"
+              style="
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 4px;
+              "
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+            </button>
+
+            <!-- Search Dropdown -->
+            <div
+              *ngIf="showSearchDropdown && searchResults.length > 0"
+              class="search-dropdown"
+              style="
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                margin-top: 4px;
+                max-height: 200px;
+                overflow-y: auto;
+                z-index: 10;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              "
+            >
+              <div
+                *ngFor="let city of searchResults"
+                (click)="selectCity(city)"
+                class="search-result-item"
+                style="
+                  padding: 10px 12px;
+                  cursor: pointer;
+                  border-bottom: 1px solid #f3f4f6;
+                  font-size: 14px;
+                "
+              >
+                <div style="font-weight: 500; color: #1f2937">
+                  {{ city.City }}
+                </div>
+                <div style="font-size: 12px; color: #6b7280">
+                  {{ city.District }}, {{ city.State }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Loading indicator -->
+            <div
+              *ngIf="isSearching"
+              style="
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                margin-top: 4px;
+                padding: 10px;
+                text-align: center;
+                font-size: 14px;
+                color: #6b7280;
+              "
+            >
+              Searching...
+            </div>
+          </div>
+
+          <!-- Selected Cities Tags -->
+          <div
+            class="tags-list"
+            *ngIf="selectedCities.length > 0"
+            style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px"
+          >
+            <span
+              *ngFor="let city of selectedCities; let i = index"
+              class="tag"
+              style="
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 12px;
+                background: #f0fdfa;
+                border: 1px solid #ccfbf1;
+                border-radius: 20px;
+                font-size: 13px;
+                color: #0d9488;
+              "
+            >
+              {{ city.City }}, {{ city.State }}
+              <button
+                type="button"
+                class="tag-remove"
+                (click)="removeCity(i)"
+                style="
+                  background: none;
+                  border: none;
+                  cursor: pointer;
+                  font-size: 18px;
+                  line-height: 1;
+                  color: #0d9488;
+                  padding: 0;
+                  margin-left: 2px;
+                "
+              >
+                ×
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <!-- Price Per Person -->
+        <div class="form-group">
+          <label class="form-label">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path
+                d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+              ></path>
+            </svg>
+            Price Per Person <span class="required">*</span>
+          </label>
+          <input
+            type="number"
+            class="form-input"
+            placeholder="Enter Price"
+            [(ngModel)]="pricePerPerson"
+            name="pricePerPerson"
+            min="0"
+          />
+        </div>
+
+        <!-- Start Location -->
+        <div class="form-group">
+          <label class="form-label">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            Start Location<span class="required">*</span>
+          </label>
+          <div
+            class="input-with-icon"
+            style="position: relative"
+            (click)="$event.stopPropagation()"
+          >
+            <input
+              type="text"
+              class="form-select"
+              placeholder="Search start location..."
+              name="startLocationQuery"
+              [(ngModel)]="startLocationQuery"
+              (input)="onStartLocationInput($event)"
+              style="padding-right: 40px"
+            />
+            <button
+              type="button"
+              class="search-icon-btn"
+              style="
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 4px;
+              "
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+            </button>
+
+            <!-- Search Dropdown -->
+            <div
+              *ngIf="
+                showStartLocationDropdown && startLocationResults.length > 0
+              "
+              class="search-dropdown"
+              style="
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                margin-top: 4px;
+                max-height: 200px;
+                overflow-y: auto;
+                z-index: 10;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              "
+            >
+              <div
+                *ngFor="let city of startLocationResults"
+                (click)="selectStartLocation(city)"
+                class="search-result-item"
+                style="
+                  padding: 10px 12px;
+                  cursor: pointer;
+                  border-bottom: 1px solid #f3f4f6;
+                  font-size: 14px;
+                "
+              >
+                <div style="font-weight: 500; color: #1f2937">
+                  {{ city.City }}
+                </div>
+                <div style="font-size: 12px; color: #6b7280">
+                  {{ city.District }}, {{ city.State }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Loading indicator -->
+            <div
+              *ngIf="isSearchingStartLocation"
+              style="
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                margin-top: 4px;
+                padding: 10px;
+                text-align: center;
+                font-size: 14px;
+                color: #6b7280;
+              "
+            >
+              Searching...
+            </div>
+          </div>
+        </div>
+
+        <!-- End Location -->
+        <div class="form-group">
+          <label class="form-label">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            End Location<span class="required">*</span>
+          </label>
+          <div
+            class="input-with-icon"
+            style="position: relative"
+            (click)="$event.stopPropagation()"
+          >
+            <input
+              type="text"
+              class="form-select"
+              placeholder="Search end location..."
+              name="endLocationQuery"
+              [(ngModel)]="endLocationQuery"
+              (input)="onEndLocationInput($event)"
+              style="padding-right: 40px"
+            />
+            <button
+              type="button"
+              class="search-icon-btn"
+              style="
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 4px;
+              "
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+            </button>
+
+            <!-- Search Dropdown -->
+            <div
+              *ngIf="showEndLocationDropdown && endLocationResults.length > 0"
+              class="search-dropdown"
+              style="
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                margin-top: 4px;
+                max-height: 200px;
+                overflow-y: auto;
+                z-index: 10;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              "
+            >
+              <div
+                *ngFor="let city of endLocationResults"
+                (click)="selectEndLocation(city)"
+                class="search-result-item"
+                style="
+                  padding: 10px 12px;
+                  cursor: pointer;
+                  border-bottom: 1px solid #f3f4f6;
+                  font-size: 14px;
+                "
+              >
+                <div style="font-weight: 500; color: #1f2937">
+                  {{ city.City }}
+                </div>
+                <div style="font-size: 12px; color: #6b7280">
+                  {{ city.District }}, {{ city.State }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Loading indicator -->
+            <div
+              *ngIf="isSearchingEndLocation"
+              style="
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                margin-top: 4px;
+                padding: 10px;
+                text-align: center;
+                font-size: 14px;
+                color: #6b7280;
+              "
+            >
+              Searching...
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Pickup Locations -->
+        <div class="form-group">
+          <label class="form-label"
+            >Add Pickup Locations <span class="required">*</span></label
+          >
+          <div
+            class="input-with-icon"
+            style="position: relative"
+            (click)="$event.stopPropagation()"
+          >
+            <input
+              type="text"
+              class="form-select"
+              placeholder="Search pickup location..."
+              name="pickupLocationQuery"
+              [(ngModel)]="pickupLocationQuery"
+              (input)="onPickupLocationInput($event)"
+              style="padding-right: 40px"
+            />
+            <button
+              type="button"
+              class="search-icon-btn"
+              style="
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 4px;
+              "
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+            </button>
+
+            <!-- Search Dropdown -->
+            <div
+              *ngIf="
+                showPickupLocationDropdown && pickupLocationResults.length > 0
+              "
+              class="search-dropdown"
+              style="
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                margin-top: 4px;
+                max-height: 200px;
+                overflow-y: auto;
+                z-index: 10;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              "
+            >
+              <div
+                *ngFor="let city of pickupLocationResults"
+                (click)="selectPickupLocation(city)"
+                class="search-result-item"
+                style="
+                  padding: 10px 12px;
+                  cursor: pointer;
+                  border-bottom: 1px solid #f3f4f6;
+                  font-size: 14px;
+                "
+              >
+                <div style="font-weight: 500; color: #1f2937">
+                  {{ city.City }}
+                </div>
+                <div style="font-size: 12px; color: #6b7280">
+                  {{ city.District }}, {{ city.State }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Loading indicator -->
+            <div
+              *ngIf="isSearchingPickupLocation"
+              style="
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                margin-top: 4px;
+                padding: 10px;
+                text-align: center;
+                font-size: 14px;
+                color: #6b7280;
+              "
+            >
+              Searching...
+            </div>
+          </div>
+
+          <!-- Selected Pickup Locations Tags -->
+          <div
+            class="tags-list"
+            *ngIf="selectedPickupLocations.length > 0"
+            style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px"
+          >
+            <span
+              *ngFor="let city of selectedPickupLocations; let i = index"
+              class="tag"
+              style="
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 12px;
+                background: #f0fdfa;
+                border: 1px solid #ccfbf1;
+                border-radius: 20px;
+                font-size: 13px;
+                color: #0d9488;
+              "
+            >
+              {{ city.City }}, {{ city.State }}
+              <button
+                type="button"
+                class="tag-remove"
+                (click)="removePickupLocation(i)"
+                style="
+                  background: none;
+                  border: none;
+                  cursor: pointer;
+                  font-size: 18px;
+                  line-height: 1;
+                  color: #0d9488;
+                  padding: 0;
+                  margin-left: 2px;
+                "
+              >
+                ×
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <!-- Trip Type Tags -->
+        <div class="form-group">
+          <label class="form-label"
+            >Trip Type Tags <span class="required">*</span></label
+          >
+          <span class="helper-text">Add 5 tags for better reach</span>
+          <div class="input-with-icon">
+            <input
+              type="text"
+              class="form-select"
+              placeholder="Type a tag and press Enter..."
+              name="tripTypeTagInput"
+              [(ngModel)]="tripTypeTagInput"
+              (keypress)="onTripTypeTagKeyPress($event)"
+            />
+          </div>
+          <div
+            class="tags-list"
+            *ngIf="tripTypeTags.length > 0"
+            style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px"
+          >
+            <span
+              *ngFor="let tag of tripTypeTags; let i = index"
+              class="tag"
+              style="
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 12px;
+                background: #f0fdfa;
+                border: 1px solid #ccfbf1;
+                border-radius: 20px;
+                font-size: 13px;
+                color: #0d9488;
+              "
+            >
+              {{ tag }}
+              <button
+                type="button"
+                class="tag-remove"
+                (click)="removeTripTypeTag(i)"
+                style="
+                  background: none;
+                  border: none;
+                  cursor: pointer;
+                  font-size: 18px;
+                  line-height: 1;
+                  color: #0d9488;
+                  padding: 0;
+                  margin-left: 2px;
+                "
+              >
+                ×
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- Batch Trips Section -->
+<section class="batch-trips-section">
+  <div class="batch-trips-container">
+    <div class="batch-header">
+      <h2 class="batch-title">Batch Trips</h2>
+      <p class="batch-subtitle">
+        Plan repeat trips to the same location by setting multiple batches with
+        different dates.
+      </p>
+    </div>
+
+    <!-- Batch Items -->
+    <div class="batch-item" *ngFor="let batch of batches; let i = index">
+      <div class="batch-item-header">
+        <span class="batch-label">Batch {{ i + 1 }} (B{{ i + 1 }})</span>
+        <div class="info-btn-wrapper" style="position: relative">
+          <button type="button" class="info-btn">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 16v-4"></path>
+              <path d="M12 8h.01"></path>
+            </svg>
+          </button>
+          <span class="info-tooltip"
+            >Avoid overlapping dates between batches.</span
+          >
+        </div>
+      </div>
+      <div class="batch-fields">
+        <div class="batch-field">
+          <label class="form-label">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            Trip Start & End Date <span class="required">*</span>
+          </label>
+          <div class="date-picker-wrapper" style="position: relative">
+            <div
+              class="date-input"
+              (click)="toggleDatePicker(i); $event.stopPropagation()"
+              style="
+                padding: 12px 16px;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                cursor: pointer;
+                background: white;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 14px;
+                color: #1f2937;
+              "
+            >
+              <span>{{ getFormattedDateRange(i) }}</span>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+
+            <!-- Date Picker Dropdown -->
+            <div
+              *ngIf="batch.showDatePicker"
+              class="date-picker-dropdown"
+              (click)="$event.stopPropagation()"
+              style="
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 12px;
+                margin-top: 8px;
+                padding: 20px;
+                z-index: 100;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                min-width: 350px;
+              "
+            >
+              <!-- Month Navigation -->
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 20px;
+                "
+              >
+                <button
+                  type="button"
+                  (click)="previousMonth(i); $event.stopPropagation()"
+                  style="
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    padding: 8px;
+                    color: #6b7280;
+                  "
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                </button>
+                <span
+                  style="
+                    font-size: 18px;
+                    font-weight: 600;
+                    color: #1f2937;
+                    font-family: &quot;Lora&quot;, serif;
+                  "
+                >
+                  {{ getMonthName(i) }}
+                </span>
+                <button
+                  type="button"
+                  (click)="nextMonth(i); $event.stopPropagation()"
+                  style="
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    padding: 8px;
+                    color: #6b7280;
+                  "
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Weekday Headers -->
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(7, 1fr);
+                  gap: 8px;
+                  margin-bottom: 12px;
+                "
+              >
+                <div
+                  *ngFor="
+                    let day of ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                  "
+                  style="
+                    text-align: center;
+                    font-size: 13px;
+                    font-weight: 500;
+                    color: #9ca3af;
+                    padding: 8px 0;
+                  "
+                >
+                  {{ day }}
+                </div>
+              </div>
+
+              <!-- Calendar Days -->
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(7, 1fr);
+                  gap: 4px;
+                "
+              >
+                <button
+                  type="button"
+                  *ngFor="let date of getDaysInMonth(i)"
+                  (click)="selectDate(date, i); $event.stopPropagation()"
+                  (mouseenter)="onDateHover(date, i)"
+                  [disabled]="isPastDate(date)"
+                  [style.background]="
+                    isStartDate(date, i) || isEndDate(date, i)
+                      ? '#0d9488'
+                      : isDateInRange(date, i)
+                        ? '#ccfbf1'
+                        : 'transparent'
+                  "
+                  [style.color]="
+                    isStartDate(date, i) || isEndDate(date, i)
+                      ? 'white'
+                      : isPastDate(date)
+                        ? '#d1d5db'
+                        : isCurrentMonth(date, i)
+                          ? '#1f2937'
+                          : '#9ca3af'
+                  "
+                  [style.opacity]="
+                    isPastDate(date)
+                      ? '0.3'
+                      : isCurrentMonth(date, i)
+                        ? '1'
+                        : '0.5'
+                  "
+                  [style.cursor]="isPastDate(date) ? 'not-allowed' : 'pointer'"
+                  [style.textDecoration]="
+                    isPastDate(date) ? 'line-through' : 'none'
+                  "
+                  [style.fontWeight]="
+                    isStartDate(date, i) || isEndDate(date, i) ? '600' : '500'
+                  "
+                  [style.boxShadow]="
+                    isStartDate(date, i) || isEndDate(date, i)
+                      ? '0 2px 8px rgba(13, 148, 136, 0.3)'
+                      : 'none'
+                  "
+                  class="calendar-date-btn"
+                  style="
+                    border: none;
+                    padding: 12px;
+                    border-radius: 8px;
+                    font-size: 14px;
+                    font-weight: 500;
+                  "
+                >
+                  {{ date ? date.getDate() : "" }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="batch-field">
+          <label class="form-label">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Trip Duration
+          </label>
+          <span class="auto-calc-label">Auto Calculate</span>
+          <input
+            type="text"
+            class="form-input"
+            [value]="getTripDuration(i)"
+            readonly
+            style="background: #f9fafb; cursor: not-allowed; color: #6b7280"
+          />
+        </div>
+        <div class="batch-field">
+          <label class="form-label"
+            >Total Slots <span class="required">*</span></label
+          >
+          <div class="slots-row">
+            <input
+              type="number"
+              class="form-input"
+              [(ngModel)]="batch.totalSlots"
+              min="1"
+              placeholder="Enter total slots"
+              style="flex: 1"
+            />
+            <button
+              type="button"
+              class="delete-btn"
+              (click)="removeBatch(i)"
+              *ngIf="batches.length > 1"
+              style="color: #e53935"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Batch Button -->
+    <div class="add-batch-wrapper">
+      <button type="button" class="add-batch-btn" (click)="addBatch()">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Add Batch
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Add Trip Images Section -->
+<section class="trip-images-section">
+  <div class="trip-images-container">
+    <div class="images-header">
+      <h2 class="images-title">Add Trip Images</h2>
+      <p class="images-subtitle">
+        Upload images to showcase your trip. Only PNG and JPG files are
+        supported.
+      </p>
+    </div>
+
+    <div class="images-grid" style="display: flex; gap: 16px; flex-wrap: wrap">
+      <!-- Upload Box -->
+      <div
+        class="upload-box"
+        style="
+          width: 253px;
+          height: 253px;
+          border: 2px dashed #d1d5db;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s;
+        "
+        (click)="fileInput.click()"
+      >
+        <div
+          class="upload-content"
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+          "
+        >
+          <button
+            type="button"
+            class="upload-icon-btn"
+            style="
+              background: #f0fdfa;
+              border: none;
+              width: 48px;
+              height: 48px;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: #0d9488;
+              cursor: pointer;
+            "
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
+          <span
+            class="upload-text"
+            style="font-size: 14px; font-weight: 500; color: #1f2937"
+            >Upload Image</span
+          >
+          <span class="upload-hint" style="font-size: 12px; color: #6b7280"
+            >PNG, JPG supported</span
+          >
+        </div>
+        <input
+          #fileInput
+          type="file"
+          accept="image/png,image/jpeg,image/jpg"
+          multiple
+          (change)="onImageSelect($event)"
+          style="display: none"
+        />
+      </div>
+
+      <!-- Uploaded Image Previews (Max 3 visible) -->
+      <div
+        *ngFor="let preview of visibleImages; let i = index"
+        class="image-preview"
+        style="
+          width: 253px;
+          height: 253px;
+          position: relative;
+          border-radius: 12px;
+          overflow: hidden;
+        "
+      >
+        <img
+          [src]="preview"
+          alt="Trip Image"
+          class="preview-img"
+          style="width: 100%; height: 100%; object-fit: cover; display: block"
+        />
+        <button
+          type="button"
+          class="remove-image-btn"
+          (click)="removeImage(i)"
+          style="
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            transition: background 0.2s;
+          "
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Remaining Images Count -->
+      <div
+        *ngIf="remainingImagesCount > 0"
+        class="remaining-images"
+        style="
+          width: 253px;
+          height: 253px;
+          border: 2px solid #e5e7eb;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #f9fafb;
+        "
+      >
+        <span
+          style="
+            font-size: 48px;
+            font-weight: 600;
+            color: #0d9488;
+            font-family: &quot;Lora&quot;, serif;
+          "
+        >
+          +{{ remainingImagesCount }}
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Trip Section -->
+<section class="about-trip-section">
+  <div class="about-trip-container">
+    <div class="about-header">
+      <h2 class="about-title">About Trip</h2>
+      <p class="about-subtitle">
+        Describe the trip's highlights, experiences, and overall vibe. Mandatory
+        field.
+      </p>
+    </div>
+
+    <div class="textarea-wrapper">
+      <textarea
+        class="about-textarea"
+        placeholder="Write here..."
+        maxlength="500"
+        [(ngModel)]="aboutTrip"
+        name="aboutTrip"
+      ></textarea>
+      <span class="char-counter">0/500</span>
+    </div>
+  </div>
+</section>
+
+<!-- Cancellation Section -->
+<section class="cancellation-section">
+  <div class="cancellation-container">
+    <div class="cancellation-header">
+      <h2 class="cancellation-title">Cancellation</h2>
+      <p class="cancellation-subtitle">
+        Define your trip's cancellation terms for travelers before booking.
+      </p>
+    </div>
+
+    <div class="cancellation-form">
+      <!-- Cancellation Term -->
+      <div class="cancellation-field">
+        <label class="form-label"
+          >Cancellation Term <span class="required">*</span></label
+        >
+        <div
+          class="custom-dropdown"
+          [class.open]="isDropdownOpen"
+          (click)="$event.stopPropagation()"
+        >
+          <div class="dropdown-trigger" (click)="toggleDropdown()">
+            <span class="dropdown-value">{{ selectedCancellation.title }}</span>
+            <svg
+              class="dropdown-arrow"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+          <div class="dropdown-menu">
+            <div
+              class="dropdown-option"
+              *ngFor="let option of cancellationOptions"
+              [class.selected]="option.value === selectedCancellation.value"
+              (click)="selectOption(option)"
+            >
+              <span class="option-title">{{ option.title }}</span>
+              <span class="option-desc">{{ option.desc }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Cancellation Window -->
+      <div
+        class="cancellation-window"
+        *ngIf="selectedCancellation.value === 'FREE'"
+      >
+        <div class="window-label">
+          <span class="window-title">Add Cancellation window</span>
+          <span class="window-hint">Add custom days</span>
+        </div>
+        <div class="days-input-wrapper">
+          <input
+            type="number"
+            class="days-input"
+            [(ngModel)]="customDays"
+            min="1"
+            placeholder="Enter days"
+          />
+        </div>
+      </div>
+
+      <!-- Predefined Days Tags -->
+      <div
+        class="days-tags"
+        style="display: flex; gap: 8px; flex-wrap: wrap"
+        *ngIf="selectedCancellation.value === 'FREE'"
+      >
+        <button
+          type="button"
+          *ngFor="let days of predefinedDays"
+          (click)="selectDayTag(days)"
+          [class.active]="isDaySelected(days)"
+          class="day-tag"
+          style="
+            padding: 8px 16px;
+            border: 1px solid;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+          "
+          [style.background]="isDaySelected(days) ? '#0d9488' : 'white'"
+          [style.color]="isDaySelected(days) ? 'white' : '#6b7280'"
+          [style.border-color]="isDaySelected(days) ? '#0d9488' : '#d1d5db'"
+        >
+          {{ days }} Days
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Message Section -->
+<section class="message-section">
+  <div class="message-container">
+    <div class="message-header">
+      <h2 class="message-title">Message</h2>
+      <p class="message-subtitle">
+        Share extra information, tips, or special instructions about the trip.
+      </p>
+    </div>
+
+    <div class="message-textarea-wrapper">
+      <textarea
+        class="message-textarea"
+        placeholder="Write here..."
+        [(ngModel)]="additionalMessage"
+        name="additionalMessage"
+      ></textarea>
+      <div class="textarea-footer">
+        <div class="format-icons">
+          <button type="button" class="format-btn active">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="21" y1="6" x2="3" y2="6"></line>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+              <line x1="17" y1="18" x2="3" y2="18"></line>
+            </svg>
+          </button>
+          <button type="button" class="format-btn">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <span class="message-char-counter">0/500</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Confirmation Modal -->
+<app-host-panel-trip-creation-confirmation
+  *ngIf="isConfirmationModalOpen"
+  [isEditMode]="isEditMode"
+  [tripData]="getTripData()"
+  (close)="closeConfirmationModal()"
+  (submitted)="onTripSubmitted()"
+></app-host-panel-trip-creation-confirmation>

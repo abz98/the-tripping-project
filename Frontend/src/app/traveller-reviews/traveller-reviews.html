@@ -1,0 +1,58 @@
+<div class="reviews-container">
+  <h1>Traveller Reviews</h1>
+  <p class="subtitle">
+    See what our community is saying about their TripWiz experiences
+  </p>
+
+  <div class="rating-summary">
+    <div class="overall-rating">
+      <div class="rating-number">{{ overallRating }}</div>
+      <div class="stars">
+        <span class="star filled" *ngFor="let star of getStarArray(5)">★</span>
+      </div>
+      <div class="total-reviews">Based on {{ totalReviews }} reviews</div>
+    </div>
+
+    <div class="rating-breakdown">
+      <div class="rating-row" *ngFor="let rating of ratingBreakdown">
+        <span class="stars-label">{{ rating.stars }} ★</span>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="rating.percentage"></div>
+        </div>
+        <span class="count">{{ rating.count }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="reviews-list">
+    <div class="review-card" *ngFor="let review of reviews">
+      <div class="review-header">
+        <div class="reviewer-info">
+          <div class="reviewer-avatar">{{ review.name.charAt(0) }}</div>
+          <div class="reviewer-details">
+            <div class="reviewer-name">
+              {{ review.name }}
+              <span class="verified-badge" *ngIf="review.verified"
+                >✓ Verified</span
+              >
+            </div>
+            <div class="reviewer-location">{{ review.location }}</div>
+          </div>
+        </div>
+        <div class="review-meta">
+          <div class="review-stars">
+            <span
+              class="star"
+              [class.filled]="star"
+              *ngFor="let star of getStarArray(review.rating)"
+              >★</span
+            >
+          </div>
+          <div class="review-date">{{ review.date }}</div>
+        </div>
+      </div>
+      <div class="trip-name">{{ review.tripName }}</div>
+      <p class="review-comment">{{ review.comment }}</p>
+    </div>
+  </div>
+</div>

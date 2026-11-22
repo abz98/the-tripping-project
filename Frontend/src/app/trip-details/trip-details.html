@@ -1,0 +1,1203 @@
+<!-- Trip Details Header Section -->
+<section *ngIf="!loading" class="trip-details-section">
+  <div class="trip-details-container">
+    <!-- Back Button -->
+    <a href="#" class="back-link">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      Back
+    </a>
+
+    <!-- Trip Info Row -->
+    <div class="trip-info-row">
+      <span class="trip-id"
+        >Trip ID: {{ trip?.id?.slice(-4).toUpperCase() }}</span
+      >
+      <div class="trip-tags">
+        <span class="trip-tag" *ngFor="let tag of trip?.tags">{{ tag }}</span>
+      </div>
+    </div>
+
+    <!-- Trip Title Row -->
+    <div class="trip-title-row">
+      <h1 class="trip-title">{{ trip?.title }}</h1>
+      <div class="trip-actions">
+        <button type="button" class="action-btn wishlist-btn">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+            ></path>
+          </svg>
+        </button>
+        <button type="button" class="action-btn share-btn">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Host Info Bar -->
+    <div class="host-info-bar">
+      <div class="host-info-item">
+        <div class="host-icon">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+        <div class="host-info-content">
+          <span class="host-label">Hosted by</span>
+          <span class="host-value">{{ trip?.host?.name }}</span>
+        </div>
+      </div>
+      <div class="host-info-item">
+        <div class="host-icon">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polygon
+              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+            ></polygon>
+          </svg>
+        </div>
+        <div class="host-info-content">
+          <div class="rating-row">
+            <span class="rating-value">4.5 / 5.0</span>
+            <div class="rating-stars">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="#0d9488"
+                stroke="#0d9488"
+                stroke-width="2"
+              >
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                ></polygon>
+              </svg>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="#0d9488"
+                stroke="#0d9488"
+                stroke-width="2"
+              >
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                ></polygon>
+              </svg>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="#0d9488"
+                stroke="#0d9488"
+                stroke-width="2"
+              >
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                ></polygon>
+              </svg>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="#0d9488"
+                stroke="#0d9488"
+                stroke-width="2"
+              >
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                ></polygon>
+              </svg>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#0d9488"
+                stroke-width="2"
+              >
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                ></polygon>
+              </svg>
+            </div>
+          </div>
+          <span class="host-label">Reviews from the past trips</span>
+        </div>
+      </div>
+      <!-- <div class="host-info-item">
+        <div class="host-icon super-host-icon">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="8" r="7"></circle>
+            <polyline
+              points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"
+            ></polyline>
+          </svg>
+        </div>
+        <div class="host-info-content">
+          <span class="super-host-label">Super Host</span>
+          <span class="host-label">Lorem Ipsum generators on</span>
+        </div>
+      </div> -->
+    </div>
+  </div>
+</section>
+
+<!-- Trip Image Gallery Section -->
+<section *ngIf="!loading" class="trip-gallery-section">
+  <div class="trip-gallery-container">
+    <div class="gallery-grid" *ngIf="trip?.images?.length >= 1">
+      <!-- Main Image -->
+      <div class="gallery-main">
+        <img [src]="trip.images[0]" alt="Trip Main Image" />
+      </div>
+
+      <!-- Side Images -->
+      <div class="gallery-side">
+        <div class="gallery-side-top">
+          <div
+            class="gallery-image"
+            *ngFor="let img of trip.images.slice(1, 3)"
+          >
+            <img [src]="img" alt="Trip Image" />
+          </div>
+        </div>
+
+        <div class="gallery-side-bottom">
+          <div class="gallery-image">
+            <img [src]="trip.images[3]" alt="Trip Image" />
+          </div>
+
+          <div class="gallery-image gallery-last">
+            <img [src]="trip.images[4]" alt="Trip Image" />
+            <button
+              type="button"
+              class="see-all-btn"
+              *ngIf="trip?.images?.length > 5"
+            >
+              See All Photos
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Main Content Section with Sidebar -->
+<section *ngIf="!loading" class="main-content-section">
+  <div class="main-content-container">
+    <!-- Left Content -->
+    <div class="main-content-left">
+      <!-- Tabs Navigation -->
+      <div class="trip-tabs">
+        <button type="button" class="trip-tab active">About Trip</button>
+        <button type="button" class="trip-tab">Itinerary</button>
+        <button type="button" class="trip-tab">Include & Exclude</button>
+        <button type="button" class="trip-tab">Cancellation</button>
+        <button type="button" class="trip-tab">Message</button>
+      </div>
+
+      <!-- About Trip Content -->
+      <div class="about-trip-content">
+        <h2 class="section-title">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 16v-4"></path>
+            <path d="M12 8h.01"></path>
+          </svg>
+          About Trip
+        </h2>
+        <div class="section-divider"></div>
+        <p class="about-trip-text">
+          {{ trip?.aboutTrip }}
+        </p>
+      </div>
+
+      <!-- Itinerary Content -->
+      <div class="itinerary-content">
+        <h2 class="section-title">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+            ></path>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+          </svg>
+          Itinerary
+        </h2>
+
+        <!-- Day 1 - Expanded -->
+        <div class="itinerary-day expanded">
+          <div class="day-header">
+            <div class="day-icon active">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <div class="day-info">
+              <span class="day-number">01 Day</span>
+              <span class="day-date">21 Sep</span>
+            </div>
+            <p class="day-summary">
+              Arrival in Srinagar, transfer to Gulmarg, welcome dinner.
+            </p>
+            <button type="button" class="expand-btn active">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+          <div class="day-content">
+            <p class="day-description">
+              There are many variations of passages of Lorem Ipsum available,
+              but the majority have suffered alteration in some form, by
+              injected humour, or randomised words which don't look even
+              slightly believable. If you are going to use a passage of Lorem
+              Ipsum, you need to be sure there isn't anything embarrassing
+              hidden in the middle of text. All the Lorem Ipsum generators on
+              the Internet tend to repeat predefined chunks as necessary.
+            </p>
+          </div>
+          <div class="day-connector">
+            <span class="connector-dot"></span>
+            <span class="connector-dot"></span>
+            <span class="connector-dot"></span>
+          </div>
+        </div>
+
+        <!-- Day 2 -->
+        <div class="itinerary-day">
+          <div class="day-header">
+            <div class="day-icon">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+              </svg>
+            </div>
+            <div class="day-info">
+              <span class="day-number">02 Day</span>
+              <span class="day-date">22 Sep</span>
+            </div>
+            <p class="day-summary">
+              Gondola ride, optional skiing lessons, evening leisure.
+            </p>
+            <button type="button" class="expand-btn">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+          <div class="day-connector">
+            <span class="connector-dot"></span>
+            <span class="connector-dot"></span>
+            <span class="connector-dot"></span>
+          </div>
+        </div>
+
+        <!-- Day 3 -->
+        <div class="itinerary-day">
+          <div class="day-header">
+            <div class="day-icon">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+              </svg>
+            </div>
+            <div class="day-info">
+              <span class="day-number">03 Day</span>
+              <span class="day-date">23 Sep</span>
+            </div>
+            <p class="day-summary">
+              Snow trek through pine forests, village visit, photography
+              session.
+            </p>
+            <button type="button" class="expand-btn">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+          <div class="day-connector">
+            <span class="connector-dot"></span>
+            <span class="connector-dot"></span>
+            <span class="connector-dot"></span>
+          </div>
+        </div>
+
+        <!-- Day 4 -->
+        <div class="itinerary-day">
+          <div class="day-header">
+            <div class="day-icon">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+              </svg>
+            </div>
+            <div class="day-info">
+              <span class="day-number">04 Day</span>
+              <span class="day-date">24 Sep</span>
+            </div>
+            <p class="day-summary">
+              Free day for skiing/snowboarding or optional excursion, farewell
+              dinner.
+            </p>
+            <button type="button" class="expand-btn">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+          <div class="day-connector">
+            <span class="connector-dot"></span>
+            <span class="connector-dot"></span>
+            <span class="connector-dot"></span>
+          </div>
+        </div>
+
+        <!-- Day 5 -->
+        <div class="itinerary-day last">
+          <div class="day-header">
+            <div class="day-icon">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+              </svg>
+            </div>
+            <div class="day-info">
+              <span class="day-number">05 Day</span>
+              <span class="day-date">25 Sep</span>
+            </div>
+            <p class="day-summary">
+              Departure to Srinagar with memories of a lifetime.
+            </p>
+            <button type="button" class="expand-btn">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="main-content-right">
+      <!-- Booking Card -->
+      <div class="booking-card">
+        <div class="booking-row">
+          <div class="booking-icon">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            </svg>
+          </div>
+          <div class="booking-info">
+            <span class="booking-value"
+              >₹ {{ formatCurrency(trip?.pricePerPerson) }}/
+              <span class="booking-unit">Person</span></span
+            >
+            <span class="booking-label">Excluding taxes and fees</span>
+          </div>
+        </div>
+        <div class="booking-row">
+          <div class="booking-icon">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div class="booking-info">
+            <span class="booking-value"
+              >{{ trip?.batches ? trip?.batches[0]?.duration.nights : "3" }}N/
+              {{ trip?.batches ? trip?.batches[0]?.duration.days : "3" }}D</span
+            >
+            <span class="booking-label">Trip Duration</span>
+          </div>
+        </div>
+        <div class="booking-row">
+          <div class="booking-icon">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+          </div>
+          <div class="booking-info">
+            <span class="booking-value">{{
+              getDestination(trip?.destination)
+            }}</span>
+          </div>
+        </div>
+        <div class="booking-row">
+          <div class="booking-icon">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <div class="booking-info">
+            <span class="booking-value">Batch Trip</span>
+            <span class="booking-label">Select your preference batch</span>
+          </div>
+        </div>
+        <div class="batch-dates">
+          <button
+            type="button"
+            class="batch-date"
+            *ngFor="let batch of trip.batches; let in = index"
+            [class.active]="batch.id == selectedBatchId"
+            (click)="batchSelected(batch)"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            {{
+              batch?.startDate
+                ? (batch.startDate | date: "dd MMM, yyyy")
+                : "No Date"
+            }}
+          </button>
+        </div>
+        <button
+          type="button"
+          class="send-request-btn"
+          (click)="openConfirmationModal()"
+        >
+          <span class="btn-text">Send Request</span>
+          <span class="btn-subtext"
+            >Available:
+            {{ selectedBatch }}
+            Slots</span
+          >
+        </button>
+      </div>
+
+      <!-- Tags Section -->
+      <div class="tags-section">
+        <span class="tags-label">Tags:</span>
+        <div class="tags-list">
+          <span class="sidebar-tag" *ngFor="let tag of trip?.tags">{{
+            tag
+          }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Include & Exclude Section -->
+<section *ngIf="!loading" class="include-exclude-section">
+  <div class="include-exclude-container">
+    <h2 class="section-title">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="9" y1="3" x2="9" y2="21"></line>
+      </svg>
+      Include & Exclude
+    </h2>
+
+    <div class="include-exclude-grid">
+      <!-- What's Included -->
+      <div class="include-column">
+        <h3 class="column-title">What's Included</h3>
+        <ul class="include-list">
+          <li class="include-item">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#0d9488"
+              stroke-width="2"
+            >
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span
+              >Accommodation in Gulmarg (standard hotel/guesthouse with
+              heating)</span
+            >
+          </li>
+          <li class="include-item">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#0d9488"
+              stroke-width="2"
+            >
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Daily breakfast and dinner during the stay</span>
+          </li>
+          <li class="include-item">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#0d9488"
+              stroke-width="2"
+            >
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Local transfers: Srinagar to Gulmarg </span>
+          </li>
+          <li class="include-item">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#0d9488"
+              stroke-width="2"
+            >
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Gulmarg Gondola ride (Phase 1 ticket included)</span>
+          </li>
+          <li class="include-item">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#0d9488"
+              stroke-width="2"
+            >
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Guided snow trek and sightseeing as per itinerary</span>
+          </li>
+          <li class="include-item">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#0d9488"
+              stroke-width="2"
+            >
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Professional trip leader and local guide support</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- What's Not Included -->
+      <div class="exclude-column">
+        <h3 class="column-title">What's Not Included</h3>
+        <ul class="exclude-list">
+          <li class="exclude-item">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#ef4444"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span>Airfare or train fare to/from Srinagar</span>
+          </li>
+          <li class="exclude-item">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#ef4444"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span
+              >Personal expenses (shopping, laundry, extra meals, etc.)</span
+            >
+          </li>
+          <li class="exclude-item">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#ef4444"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span>Gondola Phase 2 ticket (optional, extra cost)</span>
+          </li>
+          <li class="exclude-item">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#ef4444"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span
+              >Full skiing/snowboarding courses (available at additional
+              charges)</span
+            >
+          </li>
+          <li class="exclude-item">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#ef4444"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span>Travel insurance (recommended but not included)</span>
+          </li>
+          <li class="exclude-item">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#ef4444"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span>Tips to guides/drivers or staff</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Cancellation Section -->
+<section *ngIf="!loading" class="cancellation-detail-section">
+  <div class="cancellation-detail-container">
+    <h2 class="section-title">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M12 8v4l3 3"></path>
+      </svg>
+      Cancellation
+    </h2>
+
+    <div class="cancellation-policy">
+      <div class="policy-header">
+        <div class="policy-icon">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#0d9488"
+            stroke-width="2"
+          >
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <div class="policy-info">
+          <span
+            class="policy-title"
+            *ngIf="trip?.cancellationPolicy?.type == 'FREE'"
+            >{{ trip?.cancellationPolicy?.freeCancellationDay }}-Day Free
+            Cancellation</span
+          >
+          <span
+            class="policy-subtitle"
+            *ngIf="trip?.cancellationPolicy?.type == 'FREE'"
+            >Cancellations allowed up to
+            {{ trip?.cancellationPolicy?.freeCancellationDay }} days before the
+            host confirms final travelers.</span
+          >
+          <span
+            class="policy-title"
+            *ngIf="trip?.cancellationPolicy?.type !== 'FREE'"
+            >No Cancellation</span
+          >
+          <span
+            class="policy-subtitle"
+            *ngIf="trip?.cancellationPolicy?.type !== 'FREE'"
+            >No cancellation allowed.
+          </span>
+        </div>
+      </div>
+      <p class="policy-text">
+        Cancellation policies for travel trip can very widely based on the
+        host/provider. Generally, you'll find free cancellation within a certain
+        timeframe, partial refunds, or no refunds at all. It's essential to
+        check the specific terms during the booking process for the ultimate
+        clarity.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Message from Host Section -->
+<section *ngIf="!loading" class="message-host-section">
+  <div class="message-host-container">
+    <h2 class="section-title">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+        ></path>
+      </svg>
+      Message from the host
+    </h2>
+    <div class="section-divider"></div>
+
+    <p class="message-text">
+      {{ trip?.additionalMessage }}
+    </p>
+
+    <!-- <ul class="message-tips">
+      <li class="tip-item">
+        <span class="tip-dot"></span>
+        <span
+          >Always carry warm layered clothing, gloves, and thermal socks to stay
+          comfortable in sub-zero temperatures.</span
+        >
+      </li>
+      <li class="tip-item">
+        <span class="tip-dot"></span>
+        <span
+          >Stay hydrated — even in cold weather, your body loses fluids
+          quickly.</span
+        >
+      </li>
+      <li class="tip-item">
+        <span class="tip-dot"></span>
+        <span
+          >Keep a small medical kit with essentials like pain relievers, cold
+          medicine, and personal prescriptions.</span
+        >
+      </li>
+      <li class="tip-item">
+        <span class="tip-dot"></span>
+        <span
+          >Carry cash in small amounts, as ATMs may be limited in remote
+          areas.</span
+        >
+      </li>
+    </ul> -->
+  </div>
+</section>
+
+<!-- Book Now Section -->
+<section *ngIf="!loading" class="book-now-section">
+  <div class="book-now-container">
+    <button type="button" class="book-now-btn">
+      Book Now
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <line x1="12" y1="19" x2="12" y2="5"></line>
+        <polyline points="5 12 12 5 19 12"></polyline>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<!-- Related Trips Section -->
+<section *ngIf="!loading" class="related-trips-section">
+  <div class="related-trips-container">
+    <h2 class="related-trips-title">Related Trips</h2>
+
+    <div class="related-trips-grid">
+      <!-- Trip Card -->
+      <div
+        class="related-trip-card"
+        *ngFor="let relatedTrip of relatedTrips; let i = index"
+      >
+        <div class="related-card-image" *ngIf="relatedTrip?.images?.length">
+          <!-- Image -->
+          <img
+            [src]="relatedTrip.images[currentImageIndex[i]]"
+            alt="Related Trip Image"
+            class="carousel-image"
+          />
+
+          <!-- Badge -->
+          <span class="related-slots-badge">
+            Available: {{ relatedTrip.batches[0].availableSlots }} Slots
+          </span>
+
+          <!-- Navigation (optional) -->
+          <button
+            class="nav-arrow prev"
+            (click)="prevImage(relatedTrip.images, i)"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <button
+            class="nav-arrow next"
+            (click)="nextImage(relatedTrip.images, i)"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+
+          <!-- Dots -->
+          <div class="related-image-dots">
+            <span
+              *ngFor="let img of relatedTrip.images; let i = index"
+              class="dot"
+              [class.active]="i === currentImageIndex[i]"
+              (click)="setImage(i)"
+            ></span>
+          </div>
+        </div>
+
+        <div class="related-card-content">
+          <h3 class="related-trip-title">
+            {{ relatedTrip?.title }}
+          </h3>
+          <div class="related-trip-meta">
+            <span class="meta-item">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              {{
+                relatedTrip?.batches
+                  ? relatedTrip?.batches[0]?.duration.nights
+                  : "3"
+              }}N/
+              {{
+                relatedTrip?.batches
+                  ? relatedTrip?.batches[0]?.duration.days
+                  : "3"
+              }}D
+            </span>
+            <span class="meta-item">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              {{
+                relatedTrip.batches
+                  ? (relatedTrip.batches[0].startDate | date: "dd MMM")
+                  : "No Date"
+              }}
+
+              <span *ngIf="relatedTrip?.batches?.length > 1">
+                / + {{ relatedTrip.batches.length - 1 }} more
+              </span>
+            </span>
+          </div>
+          <div class="related-trip-route">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>{{ getDestination(relatedTrip?.destination) }}</span>
+          </div>
+          <div class="related-price-row">
+            <div class="related-price-info">
+              <span class="related-price"
+                >₹ {{ formatCurrency(relatedTrip?.pricePerPerson) }}/
+                <span class="per-person">Per Person</span></span
+              >
+              <span class="related-tax-note">Including taxes and fees</span>
+            </div>
+            <a href="#" class="related-view-details">View Details »</a>
+          </div>
+          <div class="related-host-info">
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              class="related-host-avatar"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <!-- <img
+              src="redtraveller.jpg"
+              alt="Sweta Dubey"
+              class="related-host-avatar"
+            /> -->
+            <div class="related-host-details">
+              <span class="related-hosted-by">Hosted by</span>
+              <span class="related-host-name">{{
+                relatedTrip?.host?.name
+              }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Show More Button -->
+    <div class="show-more-wrapper">
+      <button type="button" class="show-more-btn">Show more</button>
+    </div>
+  </div>
+</section>
+
+<!-- Trip Details Confirmation Modal -->
+<app-trip-details-confirmation
+  *ngIf="showConfirmationModal && trip"
+  [tripDetails]="{
+    batches: trip?.batches,
+    route: trip?.route,
+    selectedBatch: selectedBatchId,
+  }"
+  (close)="closeConfirmationModal()"
+  (submitRequest)="handleTripRequest($event)"
+></app-trip-details-confirmation>

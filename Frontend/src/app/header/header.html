@@ -1,0 +1,88 @@
+<header class="header">
+  <div class="header-container">
+    <!-- Logo -->
+    <div class="logo" routerLink="/home">
+      <img src="Logo.png" alt="TripVio Logo" />
+    </div>
+
+    <!-- Navigation Tabs - Only show when logged in -->
+    <div
+      *ngIf="isAuthenticated$ | async"
+      class="nav-tabs"
+      style="
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 50px;
+      "
+    >
+      <button class="nav-tab" routerLink="/home" routerLinkActive="active">
+        Traveller
+      </button>
+      <button class="nav-tab" routerLink="/host" routerLinkActive="active">
+        Host
+      </button>
+    </div>
+
+    <!-- Right Side Actions - When Logged In -->
+    <div class="header-actions" *ngIf="isAuthenticated$ | async">
+      <!-- Chat Icon -->
+      <button class="icon-btn" routerLink="chat">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+          ></path>
+        </svg>
+      </button>
+
+      <!-- User Profile -->
+      <div class="profile-dropdown">
+        <button class="profile-btn" (click)="toggleProfileDropdown()">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+        <div class="dropdown-menu" *ngIf="showProfileDropdown">
+          <button class="dropdown-item" routerLink="/home/profile">
+            View Profile
+          </button>
+          <!-- <button class="dropdown-item" routerLink="/admin/trip">Admin</button> -->
+          <button class="dropdown-item" (click)="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login Button - Only show when not logged in and not on login page -->
+    <div
+      class="header-actions"
+      *ngIf="!(isAuthenticated$ | async) && !isLoginPage()"
+    >
+      <button class="login-btn" (click)="navigateToLogin()">Login</button>
+    </div>
+  </div>
+</header>

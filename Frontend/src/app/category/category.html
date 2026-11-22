@@ -1,0 +1,67 @@
+<section class="category-section">
+  <div class="category-container">
+    <!-- Header -->
+    <h1 class="category-title">Category</h1>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="category-loading">
+      <p>Loading categories...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="category-error">
+      <p>{{ error }}</p>
+    </div>
+
+    <!-- Categories Content -->
+    <div *ngIf="!isLoading && !error">
+      <!-- Tabs -->
+      <div class="tabs-wrapper">
+        <div class="tabs">
+          <button
+            class="tab"
+            [class.active]="activeTab === 'EXPERIENCE'"
+            (click)="switchTab('EXPERIENCE')"
+            data-type="EXPERIENCE"
+          >
+            Experience
+          </button>
+          <button
+            class="tab"
+            [class.active]="activeTab === 'DESTINATION'"
+            (click)="switchTab('DESTINATION')"
+            data-type="DESTINATION"
+          >
+            Destination
+          </button>
+          <button
+            class="tab"
+            [class.active]="activeTab === 'SEASON'"
+            (click)="switchTab('SEASON')"
+            data-type="SEASON"
+          >
+            Season
+          </button>
+        </div>
+      </div>
+
+      <!-- Category Grid -->
+      <div class="category-grid" *ngIf="currentCategories.length > 0">
+        <div
+          class="category-card"
+          *ngFor="let category of currentCategories"
+          (click)="navigateToTrips(category.id)"
+        >
+          <img [src]="category.icon_url" [alt]="category.name" />
+          <div class="card-overlay"></div>
+          <span class="card-title">{{ category.name }}</span>
+        </div>
+      </div>
+
+      <!-- Empty State for Current Tab -->
+      <div *ngIf="currentCategories.length === 0" class="category-empty">
+        <p>No {{ activeTab.toLowerCase() }} categories available</p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,116 @@
+<div class="modal-overlay">
+  <div class="modal-container">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">Confirm Trip Creation</h2>
+      <button type="button" class="close-btn" (click)="closeModal()">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <!-- Trip Info -->
+      <div class="trip-info">
+        <div class="trip-location">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <span>{{ tripDestination }}</span>
+        </div>
+        <h3 class="trip-name">{{ tripTitle }}</h3>
+      </div>
+
+      <!-- Confirmation Message -->
+      <div class="reason-section">
+        <div class="reason-header">
+          <span class="reason-title">Review Your Trip:</span>
+          <button
+            type="button"
+            class="expand-btn"
+            [class.collapsed]="!isReasonExpanded"
+            (click)="toggleReason()"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+          </button>
+        </div>
+        <div class="reason-content" *ngIf="isReasonExpanded">
+          <p class="reason-text">
+            Please review your trip details before submitting. Once submitted,
+            your trip will be saved as a draft and can be published later.
+          </p>
+          <ul class="reason-list">
+            <li>Ensure all trip details are accurate and complete.</li>
+            <li>Check that dates, locations, and pricing are correct.</li>
+            <li>Review images and descriptions for quality.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Optional Response Section -->
+      <div class="response-section">
+        <label class="response-label">Additional Notes (Optional)</label>
+        <div class="response-textarea-wrapper">
+          <textarea
+            class="response-textarea"
+            placeholder="Add any additional notes or comments..."
+            [(ngModel)]="responseMessage"
+            maxlength="500"
+          ></textarea>
+          <span class="response-char-counter"
+            >{{ responseMessage.length }}/500</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <div class="footer-actions">
+        <button
+          type="button"
+          class="cancel-btn"
+          (click)="closeModal()"
+          [disabled]="isSubmitting"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="submit-btn"
+          (click)="submitTrip()"
+          [disabled]="isSubmitting"
+        >
+          {{ isSubmitting ? "Submitting..." : "Submit Trip" }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="terms-container">
+  <h1>Terms & Conditions</h1>
+  <p class="last-updated">Last Updated: {{ lastUpdated }}</p>
+
+  <div class="terms-intro">
+    <p>
+      Welcome to TripWiz. These Terms & Conditions govern your use of our
+      platform and services. Please read them carefully.
+    </p>
+  </div>
+
+  <div class="terms-content">
+    <div class="term-section" *ngFor="let section of sections; let i = index">
+      <h2>{{ i + 1 }}. {{ section.title }}</h2>
+      <p>{{ section.content }}</p>
+    </div>
+  </div>
+
+  <div class="terms-footer">
+    <p>
+      By using TripWiz, you acknowledge that you have read, understood, and
+      agree to be bound by these Terms & Conditions.
+    </p>
+  </div>
+</div>

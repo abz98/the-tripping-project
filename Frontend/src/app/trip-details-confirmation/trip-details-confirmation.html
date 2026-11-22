@@ -1,0 +1,447 @@
+<div class="modal-overlay" (click)="closeModal()">
+  <div
+    class="modal-container"
+    [class.form-modal]="currentStep === 4"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 class="modal-title" [class.teal-title]="currentStep === 4">
+        Request to Host
+      </h2>
+      <button class="close-btn" (click)="closeModal()">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal Body - Step 1 -->
+    <div class="modal-body" *ngIf="currentStep === 1">
+      <div class="icon-container">
+        <div class="envelope-icon">
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#0d9488"
+            stroke-width="1.5"
+          >
+            <path
+              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+            />
+          </svg>
+          <div class="checkmark-badge">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              stroke-width="3"
+            >
+              <path d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <h3 class="body-title">Send a Request to the Host</h3>
+      <p class="body-description">
+        Write a note to the host to let them know why you're interested in
+        joining this trip. This helps hosts understand your expectations and
+        ensures a better experience for everyone.
+      </p>
+      <div class="step-indicators">
+        <span class="step-dot active"></span>
+        <span class="step-dot"></span>
+        <span class="step-dot"></span>
+      </div>
+    </div>
+
+    <!-- Modal Body - Step 2 -->
+    <div class="modal-body" *ngIf="currentStep === 2">
+      <div class="icon-container">
+        <div class="signpost-icon">
+          <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+            <ellipse cx="30" cy="85" rx="15" ry="8" fill="#f1f5f9" />
+            <ellipse cx="90" cy="85" rx="15" ry="8" fill="#f1f5f9" />
+            <path
+              d="M25 70 Q20 50 25 40"
+              stroke="#d1d5db"
+              stroke-width="1.5"
+              fill="none"
+            />
+            <path
+              d="M22 45 L25 40 L28 45"
+              stroke="#d1d5db"
+              stroke-width="1"
+              fill="none"
+            />
+            <path
+              d="M95 70 Q100 50 95 40"
+              stroke="#d1d5db"
+              stroke-width="1.5"
+              fill="none"
+            />
+            <path
+              d="M92 45 L95 40 L98 45"
+              stroke="#d1d5db"
+              stroke-width="1"
+              fill="none"
+            />
+            <rect x="57" y="35" width="6" height="60" fill="#0d9488" />
+            <path
+              d="M45 25 L85 25 L90 32.5 L85 40 L45 40 L45 25Z"
+              fill="#0d9488"
+            />
+            <path
+              d="M75 45 L35 45 L30 52.5 L35 60 L75 60 L75 45Z"
+              fill="#14b8a6"
+            />
+            <path
+              d="M55 95 Q52 88 55 85"
+              stroke="#14b8a6"
+              stroke-width="1.5"
+              fill="none"
+            />
+            <path
+              d="M60 95 Q58 90 60 87"
+              stroke="#14b8a6"
+              stroke-width="1.5"
+              fill="none"
+            />
+            <path
+              d="M65 95 Q68 88 65 85"
+              stroke="#14b8a6"
+              stroke-width="1.5"
+              fill="none"
+            />
+          </svg>
+        </div>
+      </div>
+      <h3 class="body-title">Wait for Host Approval</h3>
+      <p class="body-description">
+        Every trip is personally hosted. The host will review your request to
+        make sure the group is a great fit.
+      </p>
+      <div class="step-indicators">
+        <span class="step-dot"></span>
+        <span class="step-dot active"></span>
+        <span class="step-dot"></span>
+      </div>
+    </div>
+
+    <!-- Modal Body - Step 3 -->
+    <div class="modal-body" *ngIf="currentStep === 3">
+      <div class="icon-container">
+        <div class="confirmation-icon">
+          <svg width="120" height="100" viewBox="0 0 120 100" fill="none">
+            <path
+              d="M60 5 L60 15"
+              stroke="#0d9488"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <path
+              d="M45 10 L50 18"
+              stroke="#0d9488"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <path
+              d="M75 10 L70 18"
+              stroke="#0d9488"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <rect x="15" y="40" width="40" height="30" rx="3" fill="#e5e7eb" />
+            <path
+              d="M15 43 L35 55 L55 43"
+              stroke="#d1d5db"
+              stroke-width="2"
+              fill="none"
+            />
+            <rect x="40" y="35" width="50" height="40" rx="4" fill="#0d9488" />
+            <path d="M40 35 L65 20 L90 35" fill="#14b8a6" />
+            <rect x="48" y="28" width="34" height="25" rx="2" fill="white" />
+            <line
+              x1="52"
+              y1="35"
+              x2="78"
+              y2="35"
+              stroke="#e5e7eb"
+              stroke-width="2"
+            />
+            <line
+              x1="52"
+              y1="41"
+              x2="78"
+              y2="41"
+              stroke="#e5e7eb"
+              stroke-width="2"
+            />
+            <line
+              x1="52"
+              y1="47"
+              x2="68"
+              y2="47"
+              stroke="#e5e7eb"
+              stroke-width="2"
+            />
+            <circle cx="95" cy="65" r="15" fill="#0d9488" />
+            <path
+              d="M88 65 L93 70 L103 60"
+              stroke="white"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              fill="none"
+            />
+          </svg>
+        </div>
+      </div>
+      <h3 class="body-title">Get Confirmation & Secure Your Spot</h3>
+      <p class="body-description">
+        Once approved, you'll receive a notification to complete your booking
+        and confirm your spot on the trip.
+      </p>
+      <div class="step-indicators">
+        <span class="step-dot"></span>
+        <span class="step-dot"></span>
+        <span class="step-dot active"></span>
+      </div>
+    </div>
+
+    <!-- Modal Body - Step 4 (Form) -->
+    <div class="modal-body form-body" *ngIf="currentStep === 4">
+      <!-- Select Row -->
+      <div class="form-row">
+        <div class="form-field" (click)="toggleBatchDropdown()">
+          <div class="field-icon">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#0d9488"
+              stroke-width="1.5"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+          </div>
+          <div class="field-content">
+            <span class="field-label">Select Batch</span>
+            <span class="field-value">{{
+              selectedBatch
+                ? formatBatchDate(selectedBatch.startDate)
+                : "Select"
+            }}</span>
+          </div>
+          <svg
+            class="dropdown-icon"
+            [class.rotated]="batchDropdownOpen"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#6b7280"
+            stroke-width="2"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+          <div
+            class="dropdown-menu"
+            *ngIf="batchDropdownOpen"
+            (click)="$event.stopPropagation()"
+          >
+            <div
+              class="dropdown-item"
+              *ngFor="let batch of tripData?.batches; let i = index"
+              (click)="selectBatch(batch)"
+              [class.selected]="selectedBatch?.id === batch.id"
+            >
+              {{ formatBatchDate(batch.startDate) }} (Batch {{ i + 1 }})
+            </div>
+          </div>
+        </div>
+        <div class="form-field" (click)="togglePickupDropdown()">
+          <div class="field-icon">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#0d9488"
+              stroke-width="1.5"
+            >
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+          </div>
+          <div class="field-content">
+            <span class="field-label">Pickup Location</span>
+            <span class="field-value">{{ selectedPickup || "Select" }}</span>
+          </div>
+          <svg
+            class="dropdown-icon"
+            [class.rotated]="pickupDropdownOpen"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#6b7280"
+            stroke-width="2"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+          <div
+            class="dropdown-menu"
+            *ngIf="pickupDropdownOpen"
+            (click)="$event.stopPropagation()"
+          >
+            <div
+              class="dropdown-item"
+              *ngFor="let location of tripData?.route?.pickupLocations"
+              (click)="selectPickup(location)"
+              [class.selected]="selectedPickup === location"
+            >
+              {{ location }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slots Row -->
+      <div class="slots-row">
+        <div class="slots-info">
+          <div class="field-icon">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#0d9488"
+              stroke-width="1.5"
+            >
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          </div>
+          <div class="field-content">
+            <span class="field-label">Ages 13 or above</span>
+            <span class="field-value">Select Slots</span>
+          </div>
+        </div>
+        <div class="slots-counter">
+          <button type="button" class="counter-btn" (click)="decrementSlots()">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="8" y1="12" x2="16" y2="12" />
+            </svg>
+          </button>
+          <span class="counter-value">{{ formData.slots }}</span>
+          <button
+            type="button"
+            class="counter-btn active"
+            (click)="incrementSlots(selectedBatch.availableSlots)"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="16" />
+              <line x1="8" y1="12" x2="16" y2="12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Message Section -->
+      <div class="message-section">
+        <label class="message-label"
+          >Describe the reason to be a part of this trip.<span class="required"
+            >*</span
+          ></label
+        >
+        <textarea
+          class="message-textarea"
+          [(ngModel)]="formData.message"
+          (input)="onMessageInput($event)"
+          maxlength="500"
+          placeholder="Hey Host,
+I cam across your trip and it looks amazing. I'd love to join because I enjoy meeting new people and exploring offbeat places.
+I'm traveling solo and this seems like the perfect group to connect with.
+Looking forward to hearing from you!"
+        ></textarea>
+        <span class="char-count">{{ getCharCount() }}/500</span>
+      </div>
+
+      <!-- Tip Section -->
+      <div class="tip-section">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="#fbbf24"
+          stroke="#fbbf24"
+          stroke-width="1"
+        >
+          <polygon
+            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+          />
+        </svg>
+        <p class="tip-text">
+          <strong>Tip:</strong> Be genuine and share what draws you to this
+          adventure — it helps the host know you're the right match for their
+          trip!
+        </p>
+      </div>
+    </div>
+
+    <!-- Modal Footer - Steps 1-3 -->
+    <div class="modal-footer" *ngIf="currentStep < 4">
+      <a href="javascript:void(0)" class="skip-link" (click)="closeModal()"
+        >Skip</a
+      >
+      <button class="next-btn" (click)="nextStep()">Next</button>
+    </div>
+
+    <!-- Modal Footer - Step 4 -->
+    <div class="modal-footer form-footer" *ngIf="currentStep === 4">
+      <button class="cancel-btn" (click)="closeModal()">Cancel</button>
+      <button
+        class="submit-btn"
+        (click)="submitForm()"
+        [disabled]="!isFormValid()"
+        [class.disabled]="!isFormValid()"
+      >
+        Submit
+      </button>
+    </div>
+  </div>
+</div>

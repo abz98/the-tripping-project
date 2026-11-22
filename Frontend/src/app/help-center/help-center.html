@@ -1,0 +1,21 @@
+<div class="help-container">
+  <h1>Help Center</h1>
+  <p class="subtitle">Find answers to frequently asked questions</p>
+
+  <div class="faq-section" *ngFor="let section of faqSections">
+    <div class="faq-category">
+      <h2>{{ section.category }}</h2>
+    </div>
+    <div class="faq-items">
+      <div class="faq-item" *ngFor="let faq of section.faqs">
+        <div class="faq-question">{{ faq.question }}</div>
+        <p class="faq-answer">{{ faq.answer }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-help">
+    <h3>Still Need Help?</h3>
+    <p>Contact our support team and we'll get back to you within 24 hours.</p>
+  </div>
+</div>

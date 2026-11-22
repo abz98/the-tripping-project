@@ -1,0 +1,384 @@
+<div class="chat-container">
+  <!-- Left Sidebar - Chat Groups -->
+  <div class="chat-sidebar">
+    <div class="sidebar-header">
+      <h2>Trip Chats</h2>
+      <button class="new-chat-btn" title="Refresh" (click)="loadUserChats()">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <polyline points="23 4 23 10 17 10" />
+          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="search-box">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.35-4.35" />
+      </svg>
+      <input
+        type="text"
+        placeholder="Search chats..."
+        [(ngModel)]="searchQuery"
+        (input)="filterChats()"
+      />
+    </div>
+
+    <div class="chat-list">
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="loading-chats">
+        <div class="spinner-small"></div>
+        <p>Loading your chats...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error && !isLoading" class="error-chats">
+        <svg
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#ef4444"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <p>{{ error }}</p>
+        <button class="retry-btn" (click)="loadUserChats()">Retry</button>
+      </div>
+
+      <!-- Chat Items -->
+      <div
+        *ngFor="let group of filteredChatGroups"
+        class="chat-item"
+        [class.active]="selectedGroup?.id === group.id"
+        [class.inactive-chat]="!group.isChatActive"
+        (click)="selectGroup(group)"
+      >
+        <div class="chat-avatar">
+          <div class="avatar-circle" [style.background]="group.color">
+            {{ group.name.charAt(0).toUpperCase() }}
+          </div>
+          <span *ngIf="group.unreadCount > 0" class="unread-badge">{{
+            group.unreadCount
+          }}</span>
+          <span
+            *ngIf="!group.isChatActive"
+            class="inactive-badge"
+            title="Chat ended"
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </span>
+        </div>
+        <div class="chat-info">
+          <div class="chat-header-row">
+            <h3>{{ group.name }}</h3>
+            <span class="chat-time">{{ group.lastMessageTime }}</span>
+          </div>
+          <div class="chat-meta">
+            <span
+              class="role-tag"
+              [class.host]="group.role === 'HOST'"
+              [class.admin]="group.role === 'ADMIN'"
+            >
+              {{ getRoleBadge(group.role) }}
+            </span>
+            <span class="destination-tag">{{ group.destination[0] }}</span>
+            <span *ngIf="!group.isChatActive" class="ended-tag">Ended</span>
+          </div>
+          <div class="chat-preview">
+            <p [class.unread]="group.unreadCount > 0">
+              {{ group.lastMessage }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div
+        *ngIf="!isLoading && !error && filteredChatGroups.length === 0"
+        class="empty-state"
+      >
+        <svg
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+        >
+          <path
+            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+          />
+        </svg>
+        <p>No chats found</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel - Chat Messages -->
+  <div class="chat-panel">
+    <div *ngIf="!selectedGroup" class="no-chat-selected">
+      <svg
+        width="80"
+        height="80"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+      >
+        <path
+          d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+        />
+        <path d="M8 10h.01M12 10h.01M16 10h.01" />
+      </svg>
+      <h2>Select a chat to start messaging</h2>
+      <p>Choose from your trip conversations</p>
+    </div>
+
+    <div *ngIf="selectedGroup" class="chat-content">
+      <!-- Chat Header -->
+      <div class="chat-header">
+        <div class="header-left">
+          <div class="chat-avatar">
+            <div class="avatar-circle" [style.background]="selectedGroup.color">
+              {{ selectedGroup.name.charAt(0).toUpperCase() }}
+            </div>
+          </div>
+          <div class="header-info">
+            <h3>{{ selectedGroup.name }}</h3>
+            <p class="members-count">
+              <span
+                class="role-badge-header"
+                [class.host]="selectedGroup.role === 'HOST'"
+                [class.admin]="selectedGroup.role === 'ADMIN'"
+              >
+                {{ getRoleBadge(selectedGroup.role) }}
+              </span>
+              • {{ selectedGroup.destination.join(", ") }}
+            </p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn" title="Search in chat">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+          </button>
+          <button class="icon-btn" title="More options">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="1" />
+              <circle cx="12" cy="5" r="1" />
+              <circle cx="12" cy="19" r="1" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages Area -->
+      <div class="messages-container" #messagesContainer>
+        <!-- Load More Button -->
+        <div *ngIf="hasMoreMessages" class="load-more-container">
+          <button
+            class="load-more-btn"
+            (click)="loadMoreMessages()"
+            [disabled]="isLoadingMessages"
+          >
+            <span *ngIf="!isLoadingMessages">Load older messages</span>
+            <span *ngIf="isLoadingMessages">Loading...</span>
+          </button>
+        </div>
+
+        <!-- Connection Status Warning -->
+        <div *ngIf="!isConnected" class="connection-warning">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          <span>Connecting to chat server...</span>
+        </div>
+
+        <div class="messages-list">
+          <div
+            *ngFor="let message of messages"
+            class="message-wrapper"
+            [class.sent]="message.isSent"
+            [class.received]="!message.isSent"
+          >
+            <div class="message-bubble">
+              <div class="message-header" *ngIf="!message.isSent">
+                <span class="sender-name">{{ message.sender }}</span>
+              </div>
+              <div class="message-text">{{ message.text }}</div>
+              <div class="message-footer">
+                <span class="message-time">{{ message.time }}</span>
+                <span *ngIf="message.isSent" class="message-status">
+                  <svg
+                    *ngIf="message.status === 'sent'"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                  <svg
+                    *ngIf="message.status === 'delivered'"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                    <polyline points="23 6 12 17 7 12" />
+                  </svg>
+                  <svg
+                    *ngIf="message.status === 'read'"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#0d9488"
+                    stroke-width="2"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                    <polyline points="23 6 12 17 7 12" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div *ngIf="typingUsers.length > 0" class="typing-indicator">
+          <div class="typing-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <span class="typing-text">{{ getTypingText() }}</span>
+        </div>
+      </div>
+
+      <!-- Message Input -->
+      <div class="message-input-container">
+        <!-- Chat Ended Warning -->
+        <div
+          *ngIf="selectedGroup && !selectedGroup.isChatActive"
+          class="chat-ended-warning"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          <span>{{ getChatStatusText() }} - Messaging is disabled</span>
+        </div>
+
+        <div *ngIf="selectedGroup.isChatActive" class="input-wrapper">
+          <button class="icon-btn" title="Emoji">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+              <line x1="9" y1="9" x2="9.01" y2="9" />
+              <line x1="15" y1="9" x2="15.01" y2="9" />
+            </svg>
+          </button>
+          <input
+            type="text"
+            placeholder="Type a message..."
+            [(ngModel)]="newMessage"
+            (keydown.enter)="sendMessage()"
+            (input)="onTyping()"
+            #messageInput
+          />
+          <button
+            class="send-btn"
+            (click)="sendMessage()"
+            [disabled]="!newMessage.trim()"
+          >
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

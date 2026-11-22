@@ -1,0 +1,150 @@
+.guidelines-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 36px;
+}
+
+.intro {
+  text-align: center;
+  color: #666;
+  margin-bottom: 50px;
+  font-size: 18px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.guidelines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.guideline-section {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 25px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.guideline-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.section-icon {
+  font-size: 32px;
+}
+
+.section-header h2 {
+  color: #045477;
+  font-size: 22px;
+  margin: 0;
+}
+
+.rules-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.rules-list li {
+  color: #555;
+  padding: 10px 0;
+  padding-left: 25px;
+  position: relative;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.rules-list li:before {
+  content: "✓";
+  color: #67EDE2;
+  font-weight: bold;
+  font-size: 18px;
+  position: absolute;
+  left: 0;
+}
+
+.best-practices {
+  background: linear-gradient(135deg, #045477 0%, #023349 100%);
+  padding: 40px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  color: white;
+}
+
+.best-practices h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 28px;
+  color: white;
+}
+
+.practices-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-width: 800px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.practices-list li {
+  padding: 15px;
+  padding-left: 35px;
+  position: relative;
+  line-height: 1.6;
+  background: rgba(255,255,255,0.1);
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.practices-list li:before {
+  content: "★";
+  color: #67EDE2;
+  font-size: 20px;
+  position: absolute;
+  left: 10px;
+}
+
+.important-note {
+  background: #fff3cd;
+  border: 2px solid #ffc107;
+  border-left: 6px solid #ffc107;
+  padding: 25px;
+  border-radius: 8px;
+}
+
+.important-note h3 {
+  color: #856404;
+  margin: 0 0 12px 0;
+  font-size: 20px;
+}
+
+.important-note p {
+  color: #856404;
+  margin: 0;
+  line-height: 1.7;
+  font-size: 16px;
+}

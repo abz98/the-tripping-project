@@ -1,0 +1,69 @@
+<section class="banner">
+  <div class="banner-container">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="banner-loading">
+      <p>Loading banners...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="banner-error">
+      <p>{{ error }}</p>
+    </div>
+
+    <!-- Banner Slides -->
+    <div
+      *ngIf="!isLoading && !error && banners.length > 0"
+      class="banner-slides"
+    >
+      <div
+        *ngFor="let banner of banners; let i = index"
+        class="banner-slide"
+        [class.active]="i === currentSlideIndex"
+      >
+        <img
+          [src]="banner.image_url"
+          [alt]="banner.title"
+          class="banner-image"
+        />
+
+        <div class="banner-content">
+          <div class="banner-text-wrapper">
+            <h1 class="banner-title">{{ banner.title }}</h1>
+            <p class="banner-subtitle">{{ banner.subtitle }}</p>
+          </div>
+          <button class="banner-btn" routerLink="{{banner.cta_link}}" *ngIf="banner.cta_text">
+            {{ banner.cta_text }}
+          </button>
+        </div>
+
+        <!-- Navigation Arrow -->
+        <button
+          class="banner-nav-btn next"
+          (click)="nextSlide()"
+          *ngIf="banners.length > 1"
+          style="background: transparent;"
+        >
+          <img src="arrowR.png" alt="Next" width="24" height="24" />
+        </button>
+      </div>
+
+      <!-- Slide Indicators -->
+      <div class="slide-indicators" *ngIf="banners.length > 1">
+        <span
+          *ngFor="let banner of banners; let i = index"
+          class="indicator"
+          [class.active]="i === currentSlideIndex"
+          (click)="goToSlide(i)"
+        ></span>
+      </div>
+    </div>
+
+    <!-- No Banners State -->
+    <div
+      *ngIf="!isLoading && !error && banners.length === 0"
+      class="banner-empty"
+    >
+      <p>No banners available</p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,461 @@
+<section class="host-trips-section">
+  <div class="host-trips-container">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" style="text-align: center; padding: 40px">
+      <p style="color: #6b7280; font-size: 16px">Loading trips...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div
+      *ngIf="
+        !isLoading &&
+        ((activeSection === 'Trip Requests' && bookingRequests.length === 0) ||
+          (activeSection !== 'Trip Requests' && filteredTrips.length === 0))
+      "
+      style="text-align: center; padding: 40px"
+    >
+      <p style="color: #6b7280; font-size: 16px; margin-bottom: 20px">
+        No trips to show yet
+      </p>
+      <button
+        (click)="editMode()"
+        style="
+          padding: 12px 24px;
+          background: #0d9488;
+          color: white;
+          border: none;
+          border-radius: 24px;
+          cursor: pointer;
+          font-size: 14px;
+        "
+      >
+        Create Your First Trip
+      </button>
+    </div>
+
+    <!-- Booking Requests Grid (Trip Requests Tab) -->
+    <div
+      class="host-trips-grid"
+      *ngIf="
+        !isLoading &&
+        activeSection === 'Trip Requests' &&
+        bookingRequests.length > 0
+      "
+    >
+      <!-- Booking Request Card -->
+      <div class="host-trip-card" *ngFor="let booking of bookingRequests">
+        <div class="card-image">
+          <img
+            [src]="booking.trip?.images?.[0] || 'redtraveller.jpg'"
+            [alt]="booking.trip?.title || 'Trip'"
+          />
+          <span class="status-badge available"> Pending Request </span>
+        </div>
+
+        <div class="card-content">
+          <div class="trip-price-row">
+            <div class="price-info">
+              <span class="price"
+                > {{ booking.trip?.title || "Trip Request" }}</span
+              >
+            </div>
+            <a
+              [routerLink]="['/host/tripDetails', booking?.trip_id]"
+              class="view-details"
+              >View Details »</a
+            >
+          </div>
+
+          <div class="trip-meta">
+            <div class="meta-item">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <span>{{ booking.batch?.start_date | date: "dd MMM" }}</span>
+            </div>
+            <div class="meta-item">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <span>{{ booking.num_travelers || 1 }} Traveller(s)</span>
+            </div>
+          </div>
+
+          <div
+            class="booking-info"
+            style="
+              margin: 12px 0;
+              padding: 12px;
+              background: #f9fafb;
+              border-radius: 8px;
+            "
+          >
+            <p style="margin: 0 0 4px 0; font-size: 12px; color: #6b7280">
+              <strong>Name:</strong> {{ booking?.user?.name }}
+            </p>
+            <p style="margin: 0 0 4px 0; font-size: 12px; color: #6b7280">
+              <strong>Email:</strong> {{ booking?.user?.email }}
+            </p>
+            <!-- <p style="margin: 0 0 4px 0; font-size: 12px; color: #6b7280">
+              <strong>Phone:</strong> {{ booking.phoneNumber }}
+            </p> -->
+            <p
+              style="margin: 0; font-size: 12px; color: #6b7280"
+              *ngIf="booking.specialRequests"
+            >
+              <strong>Special Requests:</strong> {{ booking.specialRequests }}
+            </p>
+          </div>
+
+          <div class="trip-price-row">
+            <div class="price-info">
+              <span class="price"
+                >₹ {{ formatCurrency(booking.total_amount || 0) }}</span
+              >
+              <span class="tax-note">Total Amount</span>
+            </div>
+          </div>
+
+          <div class="card-actions" style="display: flex; gap: 8px">
+            <button
+              class="action-btn"
+              style="
+                flex: 1;
+                background: #0d9488;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 10px;
+              "
+              (click)="bookingAccepted(booking?.id)"
+            >
+              Accept
+            </button>
+            <button
+              class="action-btn"
+              style="
+                flex: 1;
+                background: white;
+                color: #ef4444;
+                border: 1px solid #ef4444;
+                border-radius: 8px;
+                padding: 10px;
+              "
+              (click)="bookingRejected(booking?.id)"
+            >
+              Decline
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trips Grid (Other Tabs) -->
+    <div
+      class="host-trips-grid"
+      *ngIf="
+        !isLoading &&
+        activeSection !== 'Trip Requests' &&
+        filteredTrips.length > 0
+      "
+    >
+      <!-- Trip Card -->
+      <div class="host-trip-card" *ngFor="let trip of filteredTrips">
+        <div class="card-image">
+          <img
+            [src]="trip.images[0] || 'redtraveller.jpg'"
+            [alt]="trip.title"
+          />
+          <span
+            class="status-badge"
+            [class.available]="getFirstBatch(trip).availableSlots > 0"
+            [class.booked]="getFirstBatch(trip).availableSlots === 0"
+          >
+            {{
+              getFirstBatch(trip).availableSlots > 0
+                ? "Available: " + getFirstBatch(trip).availableSlots + " Slots"
+                : "Fully Booked"
+            }}
+          </span>
+          <div class="image-dots" *ngIf="trip.images.length > 1">
+            <span
+              class="dot"
+              *ngFor="let img of trip.images.slice(0, 4); let i = index"
+              [class.active]="i === 0"
+            ></span>
+          </div>
+        </div>
+        <div class="card-content">
+          <h3 class="trip-name">{{ trip.title }}</h3>
+          <div class="trip-meta">
+            <span class="meta-item">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              {{ getDuration(getFirstBatch(trip)) }}
+            </span>
+            <span class="meta-item" style="margin-left: auto">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              {{ getFirstBatch(trip).startDate | date: "d MMM" }}
+              <span *ngIf="trip.batches.length > 1">
+                / + {{ trip.batches.length - 1 }} more
+              </span>
+            </span>
+          </div>
+          <div class="trip-route">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span
+              >{{ trip.route.startLocation }} -
+              {{ trip.destination.join(", ") }}</span
+            >
+          </div>
+          <div class="trip-price-row">
+            <div class="price-info">
+              <span class="price"
+                >₹ {{ formatCurrency(trip.pricePerPerson) }}/
+                <span class="per-person">Per Person</span></span
+              >
+              <span class="tax-note">Including taxes and fees</span>
+            </div>
+            <a
+              [routerLink]="['/host/tripDetails', trip.id]"
+              class="view-details"
+              >View Details »</a
+            >
+          </div>
+          <div
+            class="card-actions"
+            *ngIf="activeSection !== 'active' && activeSection !== 'rejected'"
+          >
+            <button
+              (click)="editTrip(trip.id)"
+              class="action-btn edit-btn"
+              style="border-radius: 50px; background: #eaf6f9"
+            >
+              <span style="color: #147f94">Edit</span>
+            </button>
+            <button
+              class="action-btn delete-btn"
+              (click)="deleteTrip(trip.id)"
+              style="border-radius: 50px"
+            >
+              Delete
+            </button>
+          </div>
+          <div class="card-actions" *ngIf="activeSection == 'rejected'">
+            <div class="rejection-info">
+              <span class="rejection-text" style="font-size: 12px"
+                >Request Rejected</span
+              ><br />
+              <span
+                class="view-reason"
+                (click)="viewReason(trip.id)"
+                style="font-size: 10px; color: #6b7280; font-weight: normal"
+                >View Reason</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal-overlay" *ngIf="showDeleteModal" (click)="cancelDelete()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Delete Trip</h3>
+      <button class="close-btn" (click)="cancelDelete()">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>
+        Are you sure you want to delete this trip? This action cannot be undone.
+      </p>
+      <!-- <p class="warning-text">All bookings and data associated with this trip will be permanently removed.</p> -->
+    </div>
+    <div class="modal-actions">
+      <button class="cancel-btn" (click)="cancelDelete()">Cancel</button>
+      <button class="confirm-delete-btn" (click)="confirmDelete()">
+        Delete Trip
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Rejection Reason Modal -->
+<div class="modal-overlay" *ngIf="showReasonModal" (click)="closeReasonModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Rejection Reason</h3>
+      <button class="close-btn" (click)="closeReasonModal()">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="rejection-reasons" *ngIf="rejectionData?.reasons?.length > 0">
+        <h4>Reasons for rejection:</h4>
+        <ul class="reason-list">
+          <li *ngFor="let reason of rejectionData.reasons">{{ reason }}</li>
+        </ul>
+      </div>
+      <div class="admin-message" *ngIf="rejectionData?.adminMessage">
+        <h4>Admin Message:</h4>
+        <p class="admin-text">{{ rejectionData.adminMessage }}</p>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="cancel-btn" (click)="closeReasonModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Booking Rejection Confirmation Modal -->
+<div
+  class="modal-overlay"
+  *ngIf="showBookingRejectionModal"
+  (click)="cancelBookingRejection()"
+>
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Decline Booking Request</h3>
+      <button class="close-btn" (click)="cancelBookingRejection()">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to decline this booking request?</p>
+      <p class="warning-text">
+        The traveler will be notified that their request has been declined.
+      </p>
+    </div>
+    <div class="modal-actions">
+      <button class="cancel-btn" (click)="cancelBookingRejection()">
+        Cancel
+      </button>
+      <button class="confirm-delete-btn" (click)="confirmBookingRejection()">
+        Decline Request
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Booking Acceptance Confirmation Modal -->
+<div
+  class="modal-overlay"
+  *ngIf="showBookingAcceptanceModal"
+  (click)="cancelBookingAcceptance()"
+>
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Accept Booking Request</h3>
+      <button class="close-btn" (click)="cancelBookingAcceptance()">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to accept this booking request?</p>
+      <p class="admin-message" style="margin-top: 12px">
+        The traveler will be notified and can proceed with payment.
+      </p>
+    </div>
+    <div class="modal-actions">
+      <button class="cancel-btn" (click)="cancelBookingAcceptance()">
+        Cancel
+      </button>
+      <button class="btn-pay" (click)="confirmBookingAcceptance()">
+        Accept Request
+      </button>
+    </div>
+  </div>
+</div>

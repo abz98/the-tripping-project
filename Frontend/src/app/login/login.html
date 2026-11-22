@@ -1,0 +1,538 @@
+<!-- Login Container -->
+<div class="login-container">
+  <div class="login-card">
+    <!-- Logo -->
+    <div class="logo-section">
+      <img src="logoNoBG.png" alt="TripWiz Logo" class="logo" />
+    </div>
+
+    <!-- Login Form -->
+    <div
+      [hidden]="
+        !isLoginMode ||
+        showOtpScreen ||
+        showForgotPasswordScreen ||
+        showResetPasswordScreen
+      "
+      class="form-section"
+    >
+      <h2 class="form-title">Welcome Back</h2>
+      <p class="form-subtitle">Sign in to continue your journey</p>
+
+      <div class="auth-form">
+        <form [formGroup]="loginForm">
+          <!-- Error Message -->
+          <div *ngIf="errorMessage" class="error-message">
+            {{ errorMessage }}
+          </div>
+
+          <!-- Success Message -->
+          <div *ngIf="successMessage" class="success-message">
+            {{ successMessage }}
+          </div>
+
+          <!-- Email Field -->
+          <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
+              class="form-input"
+              [class.error]="
+                loginForm.get('email')?.touched &&
+                loginForm.get('email')?.invalid
+              "
+              placeholder="Enter your email"
+            />
+            <span
+              class="error-text"
+              *ngIf="getErrorMessage('email', loginForm)"
+            >
+              {{ getErrorMessage("email", loginForm) }}
+            </span>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              id="password"
+              formControlName="password"
+              class="form-input"
+              [class.error]="
+                loginForm.get('password')?.touched &&
+                loginForm.get('password')?.invalid
+              "
+              placeholder="Enter your password"
+            />
+            <span
+              class="error-text"
+              *ngIf="getErrorMessage('password', loginForm)"
+            >
+              {{ getErrorMessage("password", loginForm) }}
+            </span>
+          </div>
+
+          <!-- Forgot Password -->
+          <div class="forgot-password-section">
+            <button
+              type="button"
+              class="forgot-password-link"
+              (click)="showForgotPassword()"
+            >
+              Forgot Password?
+            </button>
+          </div>
+
+          <!-- Login Button -->
+          <button
+            type="button"
+            class="submit-btn"
+            (click)="onSubmit()"
+            [disabled]="isSubmitting"
+          >
+            {{ isSubmitting ? "Signing In..." : "Sign In" }}
+          </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="divider">
+          <span class="divider-text">or</span>
+        </div>
+
+        <!-- Google Login -->
+        <div id="google-login-btn" class="google-btn-container"></div>
+
+        <!-- Register Link -->
+        <div class="toggle-section">
+          <span class="toggle-text">Don't have an account?</span>
+          <button type="button" class="toggle-link" (click)="toggleMode()">
+            Register
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register Form -->
+    <div
+      [hidden]="
+        isLoginMode ||
+        showOtpScreen ||
+        showForgotPasswordScreen ||
+        showResetPasswordScreen
+      "
+      class="form-section"
+    >
+      <h2 class="form-title">Create Account</h2>
+      <p class="form-subtitle">Join us and start your adventure</p>
+
+      <div class="auth-form">
+        <form [formGroup]="registerForm">
+          <!-- Error Message -->
+          <div *ngIf="errorMessage" class="error-message">
+            {{ errorMessage }}
+          </div>
+
+          <!-- Success Message -->
+          <div *ngIf="successMessage" class="success-message">
+            {{ successMessage }}
+          </div>
+
+          <!-- Name Field -->
+          <div class="form-group">
+            <label for="name" class="form-label">Full Name</label>
+            <input
+              type="text"
+              id="name"
+              formControlName="full_name"
+              class="form-input"
+              [class.error]="
+                registerForm.get('full_name')?.touched &&
+                registerForm.get('full_name')?.invalid
+              "
+              placeholder="Enter your full name"
+            />
+            <span
+              class="error-text"
+              *ngIf="getErrorMessage('full_name', registerForm)"
+            >
+              {{ getErrorMessage("full_name", registerForm) }}
+            </span>
+          </div>
+
+          <!-- Email Field -->
+          <div class="form-group">
+            <label for="register-email" class="form-label">Email</label>
+            <input
+              type="email"
+              id="register-email"
+              formControlName="email"
+              class="form-input"
+              [class.error]="
+                registerForm.get('email')?.touched &&
+                registerForm.get('email')?.invalid
+              "
+              placeholder="Enter your email"
+            />
+            <span
+              class="error-text"
+              *ngIf="getErrorMessage('email', registerForm)"
+            >
+              {{ getErrorMessage("email", registerForm) }}
+            </span>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <label for="register-password" class="form-label">Password</label>
+            <input
+              type="password"
+              id="register-password"
+              formControlName="password"
+              class="form-input"
+              [class.error]="
+                registerForm.get('password')?.touched &&
+                registerForm.get('password')?.invalid
+              "
+              placeholder="Create a password"
+            />
+            <span
+              class="error-text"
+              *ngIf="getErrorMessage('password', registerForm)"
+            >
+              {{ getErrorMessage("password", registerForm) }}
+            </span>
+            <span class="hint-text"
+              >Min 8 characters with uppercase, lowercase, number & special
+              character</span
+            >
+          </div>
+
+          <!-- Confirm Password Field -->
+          <div class="form-group">
+            <label for="confirm-password" class="form-label"
+              >Confirm Password</label
+            >
+            <input
+              type="password"
+              id="confirm-password"
+              formControlName="confirmPassword"
+              class="form-input"
+              [class.error]="
+                registerForm.get('confirmPassword')?.touched &&
+                registerForm.get('confirmPassword')?.invalid
+              "
+              placeholder="Confirm your password"
+            />
+            <span
+              class="error-text"
+              *ngIf="getErrorMessage('confirmPassword', registerForm)"
+            >
+              {{ getErrorMessage("confirmPassword", registerForm) }}
+            </span>
+          </div>
+
+          <!-- Register Button -->
+          <button
+            type="button"
+            class="submit-btn"
+            (click)="onRegister()"
+            [disabled]="isSubmitting"
+          >
+            {{ isSubmitting ? "Creating Account..." : "Create Account" }}
+          </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="divider">
+          <span class="divider-text">or</span>
+        </div>
+
+        <!-- Google Login -->
+        <div id="google-register-btn" class="google-btn-container"></div>
+
+        <!-- Back to Login Link -->
+        <div class="toggle-section">
+          <span class="toggle-text">Already have an account?</span>
+          <button type="button" class="toggle-link" (click)="toggleMode()">
+            Back to Login
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- OTP Verification Screen -->
+    <div
+      [hidden]="
+        !showOtpScreen || showForgotPasswordScreen || showResetPasswordScreen
+      "
+      class="form-section"
+    >
+      <h2 class="form-title">Verify Your Email</h2>
+      <p class="form-subtitle">Enter the 4-digit code sent to your email</p>
+
+      <div class="auth-form">
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Success Message -->
+        <div *ngIf="successMessage" class="success-message">
+          {{ successMessage }}
+        </div>
+
+        <!-- OTP Input Fields -->
+        <div class="otp-container">
+          <input
+            type="text"
+            maxlength="1"
+            class="otp-input"
+            id="otp1"
+            (input)="onOtpInput($event, 1)"
+            (keydown)="onOtpKeydown($event, 1)"
+          />
+          <input
+            type="text"
+            maxlength="1"
+            class="otp-input"
+            id="otp2"
+            (input)="onOtpInput($event, 2)"
+            (keydown)="onOtpKeydown($event, 2)"
+          />
+          <input
+            type="text"
+            maxlength="1"
+            class="otp-input"
+            id="otp3"
+            (input)="onOtpInput($event, 3)"
+            (keydown)="onOtpKeydown($event, 3)"
+          />
+          <input
+            type="text"
+            maxlength="1"
+            class="otp-input"
+            id="otp4"
+            (input)="onOtpInput($event, 4)"
+            (keydown)="onOtpKeydown($event, 4)"
+          />
+        </div>
+
+        <!-- Resend Code -->
+        <div class="resend-section">
+          <span class="resend-text">Didn't receive the code?</span>
+          <button type="button" class="resend-link" (click)="onResendOtp()">
+            Resend
+          </button>
+        </div>
+
+        <!-- Verify Button -->
+        <button
+          type="button"
+          class="submit-btn"
+          (click)="onVerifyOtp()"
+          [disabled]="isSubmitting"
+        >
+          {{ isSubmitting ? "Verifying..." : "Verify & Continue" }}
+        </button>
+
+        <!-- Back to Register Link -->
+        <div class="toggle-section">
+          <button
+            type="button"
+            class="toggle-link"
+            (click)="
+              showOtpScreen = false; errorMessage = ''; successMessage = ''
+            "
+          >
+            Back to Registration
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Forgot Password Screen -->
+    <div [hidden]="!showForgotPasswordScreen" class="form-section">
+      <h2 class="form-title">Forgot Password</h2>
+      <p class="form-subtitle">Enter your email to receive a reset code</p>
+
+      <div class="auth-form">
+        <form [formGroup]="forgotPasswordForm">
+          <!-- Error Message -->
+          <div *ngIf="errorMessage" class="error-message">
+            {{ errorMessage }}
+          </div>
+
+          <!-- Success Message -->
+          <div *ngIf="successMessage" class="success-message">
+            {{ successMessage }}
+          </div>
+
+          <!-- Email Field -->
+          <div class="form-group">
+            <label for="forgot-email" class="form-label">Email</label>
+            <input
+              type="email"
+              id="forgot-email"
+              formControlName="email"
+              class="form-input"
+              [class.error]="
+                forgotPasswordForm.get('email')?.touched &&
+                forgotPasswordForm.get('email')?.invalid
+              "
+              placeholder="Enter your email address"
+            />
+            <span
+              class="error-text"
+              *ngIf="getErrorMessage('email', forgotPasswordForm)"
+            >
+              {{ getErrorMessage("email", forgotPasswordForm) }}
+            </span>
+          </div>
+
+          <!-- Send Reset Code Button -->
+          <button
+            type="button"
+            class="submit-btn"
+            (click)="onForgotPassword()"
+            [disabled]="isSubmitting"
+          >
+            {{ isSubmitting ? "Sending..." : "Send Reset Code" }}
+          </button>
+        </form>
+
+        <!-- Back to Login Link -->
+        <div class="toggle-section">
+          <button type="button" class="toggle-link" (click)="backToLogin()">
+            Back to Login
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reset Password Screen -->
+    <div [hidden]="!showResetPasswordScreen" class="form-section">
+      <h2 class="form-title">Reset Password</h2>
+      <p class="form-subtitle">Enter the code and your new password</p>
+
+      <div class="auth-form">
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Success Message -->
+        <div *ngIf="successMessage" class="success-message">
+          {{ successMessage }}
+        </div>
+
+        <!-- OTP Input Fields -->
+        <div class="otp-container">
+          <input
+            type="text"
+            maxlength="1"
+            class="otp-input"
+            id="reset-otp1"
+            (input)="onOtpInput($event, 1)"
+            (keydown)="onOtpKeydown($event, 1)"
+          />
+          <input
+            type="text"
+            maxlength="1"
+            class="otp-input"
+            id="reset-otp2"
+            (input)="onOtpInput($event, 2)"
+            (keydown)="onOtpKeydown($event, 2)"
+          />
+          <input
+            type="text"
+            maxlength="1"
+            class="otp-input"
+            id="reset-otp3"
+            (input)="onOtpInput($event, 3)"
+            (keydown)="onOtpKeydown($event, 3)"
+          />
+          <input
+            type="text"
+            maxlength="1"
+            class="otp-input"
+            id="reset-otp4"
+            (input)="onOtpInput($event, 4)"
+            (keydown)="onOtpKeydown($event, 4)"
+          />
+        </div>
+
+        <form [formGroup]="resetPasswordForm">
+          <!-- New Password Field -->
+          <div class="form-group">
+            <label for="new-password" class="form-label">New Password</label>
+            <input
+              type="password"
+              id="new-password"
+              formControlName="password"
+              class="form-input"
+              [class.error]="
+                resetPasswordForm.get('password')?.touched &&
+                resetPasswordForm.get('password')?.invalid
+              "
+              placeholder="Enter new password"
+            />
+            <span
+              class="error-text"
+              *ngIf="getErrorMessage('password', resetPasswordForm)"
+            >
+              {{ getErrorMessage("password", resetPasswordForm) }}
+            </span>
+            <span class="hint-text"
+              >Min 8 characters with uppercase, lowercase, number & special
+              character</span
+            >
+          </div>
+
+          <!-- Confirm New Password Field -->
+          <div class="form-group">
+            <label for="confirm-new-password" class="form-label"
+              >Confirm New Password</label
+            >
+            <input
+              type="password"
+              id="confirm-new-password"
+              formControlName="confirmPassword"
+              class="form-input"
+              [class.error]="
+                resetPasswordForm.get('confirmPassword')?.touched &&
+                resetPasswordForm.get('confirmPassword')?.invalid
+              "
+              placeholder="Confirm new password"
+            />
+            <span
+              class="error-text"
+              *ngIf="getErrorMessage('confirmPassword', resetPasswordForm)"
+            >
+              {{ getErrorMessage("confirmPassword", resetPasswordForm) }}
+            </span>
+          </div>
+
+          <!-- Reset Password Button -->
+          <button
+            type="button"
+            class="submit-btn"
+            (click)="onResetPassword()"
+            [disabled]="isSubmitting"
+          >
+            {{ isSubmitting ? "Resetting..." : "Reset Password" }}
+          </button>
+        </form>
+
+        <!-- Back to Login Link -->
+        <div class="toggle-section">
+          <button type="button" class="toggle-link" (click)="backToLogin()">
+            Back to Login
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

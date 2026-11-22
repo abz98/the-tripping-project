@@ -1,0 +1,35 @@
+<div class="guidelines-container">
+  <h1>Guidelines for Hosts</h1>
+  <p class="intro">
+    Follow these guidelines to provide exceptional experiences and maintain a
+    successful hosting profile
+  </p>
+
+  <div class="guidelines-grid">
+    <div class="guideline-section" *ngFor="let guideline of guidelines">
+      <div class="section-header">
+        <span class="section-icon">{{ guideline.icon }}</span>
+        <h2>{{ guideline.category }}</h2>
+      </div>
+      <ul class="rules-list">
+        <li *ngFor="let rule of guideline.rules">{{ rule }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="best-practices">
+    <h2>Best Practices for Success</h2>
+    <ul class="practices-list">
+      <li *ngFor="let practice of bestPractices">{{ practice }}</li>
+    </ul>
+  </div>
+
+  <div class="important-note">
+    <h3>⚠️ Important</h3>
+    <p>
+      Failure to follow these guidelines may result in listing suspension or
+      account termination. We're here to help you succeed - contact our host
+      support team if you have questions.
+    </p>
+  </div>
+</div>

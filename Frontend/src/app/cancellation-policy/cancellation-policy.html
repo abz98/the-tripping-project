@@ -1,0 +1,35 @@
+<div class="policy-container">
+  <h1>Cancellation & Refund Policy</h1>
+  <p class="intro">
+    Understanding our cancellation policies helps you make informed booking
+    decisions
+  </p>
+
+  <div class="policy-types">
+    <div class="policy-card" *ngFor="let policy of policies">
+      <div class="policy-header">
+        <span class="policy-icon">{{ policy.icon }}</span>
+        <h2>{{ policy.type }}</h2>
+      </div>
+      <p class="policy-description">{{ policy.description }}</p>
+      <ul class="policy-details">
+        <li *ngFor="let detail of policy.details">{{ detail }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="general-terms">
+    <h2>General Terms</h2>
+    <ul>
+      <li *ngFor="let term of generalTerms">{{ term }}</li>
+    </ul>
+  </div>
+
+  <div class="important-note">
+    <h3>Important Note</h3>
+    <p>
+      Each trip listing displays its specific cancellation policy. Please review
+      the policy before booking to ensure it meets your needs.
+    </p>
+  </div>
+</div>
